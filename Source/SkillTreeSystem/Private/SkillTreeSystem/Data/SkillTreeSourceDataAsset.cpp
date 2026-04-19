@@ -3,6 +3,8 @@
 
 #include "SkillTreeSystem/Data/SkillTreeSourceDataAsset.h"
 
+#include "SkillTreeSystem/Interfaces/SkillTreeLayoutMaker.h"
+
 void USkillTreeSourceDataAsset::GetNodesIds_Implementation(const FName& TreeId, TArray<FName>& OutNodes)
 {
 	Nodes.GetKeys(OutNodes);
@@ -23,21 +25,23 @@ void USkillTreeSourceDataAsset::GetNodeAppearance_Implementation(const FName& Tr
 
 void USkillTreeSourceDataAsset::GetNodesPosition_Implementation(const FName& TreeCategory, TMap<FName, FSkillTreeNodePosition>& NodePositions)
 {
-	for (const auto& [NodeId, NodeData] : Nodes)
-	{
-		NodePositions.Add(NodeId, NodeData.Position);
-	}
+	if (!(LayoutSource && IsValid(LayoutSource.GetObject())))
+		return;
+
+	TMap<FSkillTreeLinkName, FSkillTreeLinkPosition> LinksPositions;
+	ISkillTreeLayoutMaker::Execute_GetElementsPosition(LayoutSource.GetObject(), NodePositions, LinksPositions);
 }
 
 void USkillTreeSourceDataAsset::GetLinks_Implementation(const FName& TreeCategory, TArray<FSkillTreeLinkName>& OutLinks)
 {
-	for (const auto& [NodeId, NodeData] : Nodes)
-	{
-		for (const auto& [LinkedNode, _] : NodeData.Links)
-		{
-			OutLinks.Add({NodeId, LinkedNode});
-		}
-	}
+	if (!(LayoutSource && IsValid(LayoutSource.GetObject())))
+		return;
+	
+	TMap<FName, FSkillTreeNodePosition> NodePositions;
+	TMap<FSkillTreeLinkName, FSkillTreeLinkPosition> LinksPositions;
+	ISkillTreeLayoutMaker::Execute_GetElementsPosition(LayoutSource.GetObject(), NodePositions, LinksPositions);
+	
+	LinksPositions.GetKeys(OutLinks);
 }
 
 void USkillTreeSourceDataAsset::GetLinkClass_Implementation(const FName& TreeCategory, const FSkillTreeLinkName& LinkName, TSubclassOf<USkillTreeLinkWidget>& OutWidgetClass)
@@ -47,28 +51,14 @@ void USkillTreeSourceDataAsset::GetLinkClass_Implementation(const FName& TreeCat
 
 void USkillTreeSourceDataAsset::GetLinkAppearance_Implementation(const FName& TreeCategory, const FSkillTreeLinkName& LinkName, FSkillTreeLinkAppearance& OutAppearance)
 {
-	if (auto* StartNode = Nodes.Find(LinkName.StartNodeName))
-	{
-		if (auto* EndNodeAppearance = StartNode->Links.Find(LinkName.EndNodeName))
-		{
-			OutAppearance = *EndNodeAppearance;
-		}
-	}
+	OutAppearance = LinkAppearance;
 }
 
 void USkillTreeSourceDataAsset::GetLinksPositions_Implementation(const FName& TreeCategory, TMap<FSkillTreeLinkName, FSkillTreeLinkPosition>& OutLinksPositions)
 {
-	for (const auto& [StartNodeId, StartNodeData] : Nodes)
-	{
-		for (const auto& [EndNodeId, _] : StartNodeData.Links)
-		{
-			FSkillTreeLinkPosition Position;
-			Position.CanvasStartLocation = StartNodeData.Position.CanvasLocation;
-			if (auto* EndNodeData = Nodes.Find(EndNodeId))
-			{
-				Position.CanvasEndLocation = EndNodeData->Position.CanvasLocation;
-			}
-			OutLinksPositions.Add({StartNodeId, EndNodeId}, Position);
-		}
-	}
+	if (!(LayoutSource && IsValid(LayoutSource.GetObject())))
+		return;
+
+	TMap<FName, FSkillTreeNodePosition> NodePositions;
+	ISkillTreeLayoutMaker::Execute_GetElementsPosition(LayoutSource.GetObject(), NodePositions, OutLinksPositions);
 }

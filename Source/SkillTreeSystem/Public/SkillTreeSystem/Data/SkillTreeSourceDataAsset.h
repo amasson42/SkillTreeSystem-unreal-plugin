@@ -7,22 +7,18 @@
 #include "SkillTreeSystem/Interfaces/SkillTreeSourceInterface.h"
 #include "SkillTreeSourceDataAsset.generated.h"
 
+class ISkillTreeLayoutMaker;
+
 USTRUCT(BlueprintType)
-struct FSkillTreeSourceDataAssetElement
+struct SKILLTREESYSTEM_API FSkillTreeSourceDataAssetElement
 {
 	GENERATED_BODY()
 	
 public:
-
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FSkillTreeNodeAppearance Appearance;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FSkillTreeNodePosition Position;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TMap<FName, FSkillTreeLinkAppearance> Links;
-
 };
 
 /**
@@ -45,13 +41,19 @@ public:
 	void GetLinkAppearance_Implementation(const FName& TreeCategory, const FSkillTreeLinkName& LinkName, FSkillTreeLinkAppearance& OutAppearance) override;
 	void GetLinksPositions_Implementation(const FName& TreeCategory, TMap<FSkillTreeLinkName, FSkillTreeLinkPosition>& OutLinksPositions) override;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Widget")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Widget|Node")
 	TSubclassOf<USkillTreeNodeWidget> NodeWidgetClass;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Widget")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Widget|Link")
 	TSubclassOf<USkillTreeLinkWidget> LinkWidgetClass;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Nodes")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Widget|Link")
+	FSkillTreeLinkAppearance LinkAppearance;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Data")
 	TMap<FName, FSkillTreeSourceDataAssetElement> Nodes;
-
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Layout")
+	TScriptInterface<ISkillTreeLayoutMaker> LayoutSource;
+	
 };
