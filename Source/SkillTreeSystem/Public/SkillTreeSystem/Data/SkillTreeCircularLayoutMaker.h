@@ -15,7 +15,10 @@ struct SKILLTREESYSTEM_API FSkillTreeCircularLayoutElement
 public:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TSet<FName> Links;
+	FName Name;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FName Parent;
 	
 };
 
@@ -32,6 +35,18 @@ public:
 	virtual void GetElementsPosition_Implementation(TMap<FName, FSkillTreeNodePosition>& NodePositions, TMap<FSkillTreeLinkName, FSkillTreeLinkPosition>& LinkPositions) override;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Nodes")
-	TMap<FName, FSkillTreeCircularLayoutElement> Nodes;
+	TArray<FSkillTreeCircularLayoutElement> Nodes;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Layout")
+	float RootCircleRadius = 150.0f;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Layout")
+	float CirclesDistance = 100.0f;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Layout")
+	float ArcStartAngle = 90.0f;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Layout")
+	float ArcEndAngle = 90.0f + 360.0f;
 	
 };
