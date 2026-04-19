@@ -1,0 +1,92 @@
+﻿// Fill out your copyright notice in the Description page of Project Settings.
+
+#pragma once
+
+#include "CoreMinimal.h"
+#include "UObject/Object.h"
+#include "SkillTreeStructures.generated.h"
+
+USTRUCT(BlueprintType)
+struct SKILLTREESYSTEM_API FSkillTreeNodeAppearance
+{
+	GENERATED_BODY()
+	
+public:
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSoftObjectPtr<UTexture2D> Icon;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSoftObjectPtr<UMaterialInterface> Background;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FText Label;
+	
+};
+
+USTRUCT(BlueprintType)
+struct SKILLTREESYSTEM_API FSkillTreeNodePosition
+{
+	GENERATED_BODY()
+	
+public:
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FVector2D CanvasLocation;
+	
+};
+
+USTRUCT(BlueprintType)
+struct SKILLTREESYSTEM_API FSkillTreeLinkName
+{
+	GENERATED_BODY()
+	
+public:
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FName StartNodeName;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FName EndNodeName;
+	
+	bool operator==(const FSkillTreeLinkName& Other) const
+	{
+		return StartNodeName == Other.StartNodeName
+			&& EndNodeName == Other.EndNodeName;
+	}
+};
+
+FORCEINLINE uint32 GetTypeHash(const FSkillTreeLinkName& Link)
+{
+	return HashCombine(
+		GetTypeHash(Link.StartNodeName),
+		GetTypeHash(Link.EndNodeName)
+	);
+}
+
+USTRUCT(BlueprintType)
+struct SKILLTREESYSTEM_API FSkillTreeLinkAppearance
+{
+	GENERATED_BODY()
+	
+public:
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSoftObjectPtr<UMaterialInterface> LinkMaterial;
+	
+};
+
+USTRUCT(BlueprintType)
+struct SKILLTREESYSTEM_API FSkillTreeLinkPosition
+{
+	GENERATED_BODY()
+	
+public:
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FVector2D CanvasStartLocation;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FVector2D CanvasEndLocation;
+	
+};
