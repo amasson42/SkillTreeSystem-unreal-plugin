@@ -10,7 +10,7 @@
 /**
  * 
  */
-UCLASS(BlueprintType)
+UCLASS()
 class SKILLTREESYSTEM_API USkillTreeLinkWidget : public UUserWidget
 {
 	GENERATED_BODY()
@@ -25,6 +25,9 @@ public:
 	
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "SkillTreeLink")
 	void SetCanvasPosition(const FSkillTreeLinkPosition& Position, UCanvasPanelSlot* CanvasSlot);
+	
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "SkillTreeLink")
+	void SetSkillState(const FSkillTreeLinkState& State);
 	
 protected:
 	

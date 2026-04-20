@@ -28,6 +28,9 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "SkillTreeNode")
 	void SetCanvasPosition(const FSkillTreeNodePosition& Position, UCanvasPanelSlot* CanvasSlot);
 	
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "SkillTreeNode|State")
+	void SetSkillState(const FSkillTreeNodeState& State);
+	
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "SkillTreeNode")
 	void SetSelected(bool bIsSelected);
 	

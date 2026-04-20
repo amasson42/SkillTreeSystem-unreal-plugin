@@ -90,3 +90,45 @@ public:
 	FVector2D CanvasEndLocation;
 	
 };
+
+UENUM(BlueprintType)
+enum class ESkillTreeElementStatus : uint8
+{
+	Locked = 0		UMETA(DisplayName = "Locked"),
+	Available = 1	UMETA(DisplayName = "Available"),
+	Used = 2		UMETA(DisplayName = "Used"),
+};
+
+USTRUCT(BlueprintType)
+struct SKILLTREESYSTEM_API FSkillTreeNodeState
+{
+	GENERATED_BODY()
+	
+public:
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	ESkillTreeElementStatus Status = ESkillTreeElementStatus::Locked;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 Level = 0;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 MaxLevel = 1;
+	
+};
+
+USTRUCT(BlueprintType)
+struct SKILLTREESYSTEM_API FSkillTreeLinkState
+{
+	GENERATED_BODY()
+
+public:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	ESkillTreeElementStatus Status = ESkillTreeElementStatus::Locked;
+
+	void InitFromNodeStates(const FSkillTreeNodeState& Start, const FSkillTreeNodeState& End)
+	{
+		Status = FMath::Min(Start.Status, End.Status);
+	}
+};
