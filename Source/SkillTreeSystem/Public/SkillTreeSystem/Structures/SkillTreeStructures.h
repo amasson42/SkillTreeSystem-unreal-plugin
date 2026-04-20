@@ -95,7 +95,8 @@ enum class ESkillTreeElementStatus : uint8
 {
 	Locked = 0		UMETA(DisplayName = "Locked"),
 	Available = 1	UMETA(DisplayName = "Available"),
-	Used = 2		UMETA(DisplayName = "Used"),
+	Picked = 2		UMETA(DisplayName = "Picked"),
+	Upgradeable = 3	UMETA(DisplayName = "Upgradeable"),
 };
 
 USTRUCT(BlueprintType)
