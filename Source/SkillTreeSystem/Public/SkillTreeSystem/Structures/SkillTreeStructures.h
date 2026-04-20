@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameplayTagContainer.h"
 #include "UObject/Object.h"
 #include "SkillTreeStructures.generated.h"
 
@@ -17,10 +18,9 @@ public:
 	TSoftObjectPtr<UTexture2D> Icon;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TSoftObjectPtr<UMaterialInterface> Background;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FText Label;
+	
+	// Fill up generic node appearance parameters
 	
 };
 
@@ -71,8 +71,7 @@ struct SKILLTREESYSTEM_API FSkillTreeLinkAppearance
 	
 public:
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TSoftObjectPtr<UMaterialInterface> LinkMaterial;
+	// Fill up generic link appearance parameters
 	
 };
 
