@@ -30,3 +30,22 @@ void USkillTreeNodeWidget::NativePreConstruct()
 	UpdateAppearance(Appearance);
 }
 #endif
+
+void USkillTreeNodeWidget::CallNodeClicked(bool bRightClick, bool bDoubleClick)
+{
+	if (bRightClick)
+	{
+		OnNodeRightClicked.Broadcast(this, NodeId);
+	}
+	else
+	{
+		if (bDoubleClick)
+		{
+			OnNodeDoubleClicked.Broadcast(this, NodeId);
+		}
+		else
+		{
+			OnNodeClicked.Broadcast(this, NodeId);
+		}
+	}
+}
