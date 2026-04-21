@@ -165,6 +165,7 @@ void UMaterialBlendTask::FinaliseBlend()
 				FinalDMI->SetVectorParameterValue(Param.Name, Param.To);
 
 			ActiveDMI = FinalDMI;
+			TargetImage->SetBrushFromMaterial(ActiveDMI);
 		}
 	}
 
