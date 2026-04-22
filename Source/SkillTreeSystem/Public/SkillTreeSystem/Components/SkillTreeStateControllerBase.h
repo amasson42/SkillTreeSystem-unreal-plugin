@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "SkillTreeSystem/Structures/SkillTreeStructures.h"
+#include "SkillTreeSystem/Structures/SkillTreeCoreStructures.h"
 #include "UObject/Object.h"
 #include "SkillTreeStateControllerBase.generated.h"
 

@@ -3,8 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "SkillTreeSystem/Structures/SkillTreeStructures.h"
 #include "UObject/Interface.h"
+#include "SkillTreeSystem/Structures/SkillTreeCoreStructures.h"
+#include "SkillTreeSystem/Structures/SkillTreeCanvasStructures.h"
 #include "SkillTreeSourceInterface.generated.h"
 
 class USkillTreeNodeWidget;

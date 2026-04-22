@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "SkillTreeSystem/Structures/SkillTreeStructures.h"
 #include "SkillTreeWidget.generated.h"
 
 class USkillTreeStateControllerBase;

@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "SkillTreeSystem/Structures/SkillTreeStructures.h"
+#include "SkillTreeSystem/Structures/SkillTreeCanvasStructures.h"
 #include "SkillTreeNodeWidget.generated.h"
 
 class UCanvasPanelSlot;

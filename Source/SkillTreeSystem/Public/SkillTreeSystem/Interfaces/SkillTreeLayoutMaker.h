@@ -3,7 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "SkillTreeSystem/Structures/SkillTreeStructures.h"
+#include "SkillTreeSystem/Structures/SkillTreeCoreStructures.h"
+#include "SkillTreeSystem/Structures/SkillTreeCanvasStructures.h"
 #include "UObject/Interface.h"
 #include "SkillTreeLayoutMaker.generated.h"
 

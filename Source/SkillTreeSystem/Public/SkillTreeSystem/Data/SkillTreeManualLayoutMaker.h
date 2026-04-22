@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DataAsset.h"
+#include "SkillTreeSystem/Structures/SkillTreeCanvasStructures.h"
 #include "SkillTreeSystem/Interfaces/SkillTreeLayoutMaker.h"
 #include "SkillTreeManualLayoutMaker.generated.h"
 

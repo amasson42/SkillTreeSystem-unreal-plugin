@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "SkillTreeSystem/Structures/SkillTreeStructures.h"
+#include "SkillTreeSystem/Structures/SkillTreeCanvasStructures.h"
 #include "SkillTreeLinkWidget.generated.h"
 
 /**
@@ -39,10 +39,10 @@ protected:
 	
 	UFUNCTION(BlueprintImplementableEvent, Category = "SkillTreeLink")
 	void UpdateAppearance(const FSkillTreeLinkAppearance& NewAppearance);
-
+	
 protected:
-
+	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "SkillTreeLink", meta = (ExposeOnSpawn = true))
 	FSkillTreeLinkAppearance Appearance;
-
+	
 };
