@@ -8,9 +8,9 @@
 #include "SkillTreeStateControllerBase.generated.h"
 
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnSkillTreeNodeUpdated, const FName&, TreeCategory, const FName&, NodeId, const FSkillTreeNodeState&, State);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnSkillTreeLinkUpdated, const FName&, TreeCategory, const FSkillTreeLinkName&, LinkName, const FSkillTreeLinkState&, State);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnSkillTreeRequestModify, const FName&, TreeCategory, const FName&, NodeId, int32, NewLevel);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnSkillTreeNodeUpdated, const FGameplayTag&, TreeCategory, const FGameplayTag&, NodeId, const FSkillTreeNodeState&, State);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnSkillTreeLinkUpdated, const FGameplayTag&, TreeCategory, const FSkillTreeLinkName&, LinkName, const FSkillTreeLinkState&, State);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnSkillTreeRequestModify, const FGameplayTag&, TreeCategory, const FGameplayTag&, NodeId, int32, NewLevel);
 
 /**
  * 
@@ -23,10 +23,10 @@ class SKILLTREESYSTEM_API USkillTreeStateControllerBase : public UObject
 public:
 	
 	UFUNCTION(BlueprintCallable, Category = "SkillTreeController|State")
-	virtual void GetNodeState(const FName& TreeCategory, const FName& NodeId, FSkillTreeNodeState& OutState) {}
+	virtual void GetNodeState(const FGameplayTag& TreeCategory, const FGameplayTag& NodeId, FSkillTreeNodeState& OutState) {}
 	
 	UFUNCTION(BlueprintCallable, Category = "SkillTreeController|State")
-	virtual void GetLinkState(const FName& TreeCategory, const FSkillTreeLinkName& LinkName, FSkillTreeLinkState& OutState) {}
+	virtual void GetLinkState(const FGameplayTag& TreeCategory, const FSkillTreeLinkName& LinkName, FSkillTreeLinkState& OutState) {}
 	
 	UPROPERTY(BlueprintAssignable, Category = "SkillTreeController|State")
 	FOnSkillTreeNodeUpdated OnSkillTreeNodeUpdated;
@@ -35,7 +35,7 @@ public:
 	FOnSkillTreeLinkUpdated OnSkillTreeLinkUpdated;
 	
 	UFUNCTION(BlueprintCallable, Category = "SkillTreeController|Request")
-	void RequestModifySkill(const FName& TreeCategory, const FName& NodeId, int32 NewLevel);
+	void RequestModifySkill(const FGameplayTag& TreeCategory, const FGameplayTag& NodeId, int32 NewLevel);
 	
 	UPROPERTY(BlueprintAssignable, Category = "SkillTreeController|Request")
 	FOnSkillTreeRequestModify OnRequestPickSkill;

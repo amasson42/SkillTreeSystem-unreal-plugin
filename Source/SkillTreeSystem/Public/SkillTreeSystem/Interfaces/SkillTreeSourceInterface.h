@@ -30,27 +30,27 @@ class SKILLTREESYSTEM_API ISkillTreeSourceInterface
 public:
 	
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "SkillTreeSourceInterface|Nodes")
-	void GetNodesIds(const FName& TreeCategory, TArray<FName>& OutNodes);
+	void GetNodesIds(const FGameplayTag& TreeCategory, TArray<FGameplayTag>& OutNodes);
 	
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "SkillTreeSourceInterface|Nodes")
-	void GetNodeClass(const FName& TreeCategory, const FName& NodeId, TSubclassOf<USkillTreeNodeWidget>& OutWidgetClass);
+	void GetNodeClass(const FGameplayTag& TreeCategory, const FGameplayTag& NodeId, TSubclassOf<USkillTreeNodeWidget>& OutWidgetClass);
 	
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "SkillTreeSourceInterface|Nodes")
-	void GetNodeAppearance(const FName& TreeCategory, const FName& NodeId, FSkillTreeNodeAppearance& OutAppearance);
+	void GetNodeAppearance(const FGameplayTag& TreeCategory, const FGameplayTag& NodeId, FSkillTreeNodeAppearance& OutAppearance);
 	
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "SkillTreeSourceInterface|Nodes")
-	void GetNodesPosition(const FName& TreeCategory, TMap<FName, FSkillTreeNodePosition>& NodePositions);
+	void GetNodesPosition(const FGameplayTag& TreeCategory, TMap<FGameplayTag, FSkillTreeNodePosition>& NodePositions);
 	
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "SkillTreeSourceInterface|Links")
-	void GetLinks(const FName& TreeCategory, TArray<FSkillTreeLinkName>& OutLinks);
+	void GetLinks(const FGameplayTag& TreeCategory, TArray<FSkillTreeLinkName>& OutLinks);
 	
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "SkillTreeSourceInterface|Links")
-	void GetLinkClass(const FName& TreeCategory, const FSkillTreeLinkName& LinkName, TSubclassOf<USkillTreeLinkWidget>& OutWidgetClass);
+	void GetLinkClass(const FGameplayTag& TreeCategory, const FSkillTreeLinkName& LinkName, TSubclassOf<USkillTreeLinkWidget>& OutWidgetClass);
 	
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "SkillTreeSourceInterface|Links")
-	void GetLinkAppearance(const FName& TreeCategory, const FSkillTreeLinkName& LinkName, FSkillTreeLinkAppearance& OutAppearance);
+	void GetLinkAppearance(const FGameplayTag& TreeCategory, const FSkillTreeLinkName& LinkName, FSkillTreeLinkAppearance& OutAppearance);
 	
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "SkillTreeSourceInterface|Links")
-	void GetLinksPositions(const FName& TreeCategory, TMap<FSkillTreeLinkName, FSkillTreeLinkPosition>& OutLinksPositions);
+	void GetLinksPositions(const FGameplayTag& TreeCategory, TMap<FSkillTreeLinkName, FSkillTreeLinkPosition>& OutLinksPositions);
 	
 };

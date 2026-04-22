@@ -6,7 +6,7 @@
 
 struct _NodeData
 {
-	FName Name;
+	FGameplayTag Name;
 	_NodeData* ParentPtr = nullptr;
 	TArray<_NodeData*> ChildsPtr;
 	
@@ -17,7 +17,7 @@ struct _NodeData
 	
 	FVector2D Position = FVector2D::ZeroVector;
 	
-	_NodeData(FName InName): Name(InName) {}
+	_NodeData(FGameplayTag InName): Name(InName) {}
 };
 
 static void _CalculateLocalNodeLevel(_NodeData* NodePtr)
@@ -34,8 +34,8 @@ static void _CalculateLocalNodeLevel(_NodeData* NodePtr)
 };
 
 static void _PopulateOutElements(
-	const TMap<FName, _NodeData>& LocalNodeDatas,
-	TMap<FName, FSkillTreeNodePosition>& OutNodePositions,
+	const TMap<FGameplayTag, _NodeData>& LocalNodeDatas,
+	TMap<FGameplayTag, FSkillTreeNodePosition>& OutNodePositions,
 	TMap<FSkillTreeLinkName, FSkillTreeLinkPosition>& OutLinkPositions)
 {
 	for (const auto& [NodeName, LocalNodeData] : LocalNodeDatas)
@@ -49,6 +49,7 @@ static void _PopulateOutElements(
 			FSkillTreeLinkPosition LinkPosition;
 			LinkPosition.CanvasStartLocation = LocalNodeData.ParentPtr->Position;
 			LinkPosition.CanvasEndLocation = LocalNodeData.Position;
+			
 			OutLinkPositions.Add(
 				{LocalNodeData.ParentPtr->Name, NodeName},
 				LinkPosition
@@ -81,10 +82,10 @@ void _CalculateNodesAngles(_NodeData* ParentNodeData, TSet<_NodeData*> Parents)
 }
 
 void USkillTreeCircularLayoutMaker::GetElementsPosition_Implementation(
-	TMap<FName, FSkillTreeNodePosition>& OutNodePositions,
+	TMap<FGameplayTag, FSkillTreeNodePosition>& OutNodePositions,
 	TMap<FSkillTreeLinkName, FSkillTreeLinkPosition>& OutLinkPositions)
 {
-	TMap<FName, _NodeData> LocalNodeDatas;
+	TMap<FGameplayTag, _NodeData> LocalNodeDatas;
 	
 	// Instanciate all local data
 	for (const auto& Node : Nodes)
@@ -93,7 +94,7 @@ void USkillTreeCircularLayoutMaker::GetElementsPosition_Implementation(
 	// Link to parents and childrens
 	for (const auto& Node : Nodes)
 	{
-		if (Node.Parent.IsNone()) continue;
+		if (!Node.Parent.IsValid()) continue;
 		
 		auto& LocalNodeData = LocalNodeDatas[Node.Name];
 		LocalNodeData.ParentPtr = LocalNodeDatas.Find(Node.Parent);
@@ -101,7 +102,7 @@ void USkillTreeCircularLayoutMaker::GetElementsPosition_Implementation(
 			LocalNodeData.ParentPtr->ChildsPtr.Add(&LocalNodeData);
 	}
 	
-	_NodeData RootNode {FName()};
+	_NodeData RootNode {FGameplayTag()};
 	
 	// Find roots and levels
 	for (auto& [NodeId, LocalNodeData] : LocalNodeDatas)

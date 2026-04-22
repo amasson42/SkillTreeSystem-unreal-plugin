@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameplayTagContainer.h"
 #include "UObject/Object.h"
 #include "SkillTreeCoreStructures.generated.h"
 
@@ -14,10 +15,10 @@ struct SKILLTREESYSTEM_API FSkillTreeLinkName
 public:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FName StartNodeName;
+	FGameplayTag StartNodeName;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FName EndNodeName;
+	FGameplayTag EndNodeName;
 	
 	bool operator==(const FSkillTreeLinkName& Other) const
 	{

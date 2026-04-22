@@ -26,6 +26,6 @@ class SKILLTREESYSTEM_API ISkillTreeLayoutMaker
 public:
 	
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "SkillTreeLayoutMaker")
-	void GetElementsPosition(TMap<FName, FSkillTreeNodePosition>& NodePositions, TMap<FSkillTreeLinkName, FSkillTreeLinkPosition>& LinkPositions);
+	void GetElementsPosition(TMap<FGameplayTag, FSkillTreeNodePosition>& NodePositions, TMap<FSkillTreeLinkName, FSkillTreeLinkPosition>& LinkPositions);
 	
 };

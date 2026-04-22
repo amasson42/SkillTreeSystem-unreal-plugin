@@ -19,7 +19,7 @@ public:
 	FSkillTreeNodePosition Position;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	TSet<FName> Links;
+	TSet<FGameplayTag> Links;
 
 };
 
@@ -33,9 +33,9 @@ class SKILLTREESYSTEM_API USkillTreeManualLayoutMaker : public UDataAsset, publi
 	
 public:
 	
-	virtual void GetElementsPosition_Implementation(TMap<FName, FSkillTreeNodePosition>& NodePositions, TMap<FSkillTreeLinkName, FSkillTreeLinkPosition>& LinkPositions) override;
+	virtual void GetElementsPosition_Implementation(TMap<FGameplayTag, FSkillTreeNodePosition>& NodePositions, TMap<FSkillTreeLinkName, FSkillTreeLinkPosition>& LinkPositions) override;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Nodes")
-	TMap<FName, FSkillTreeManualLayoutElement> Nodes;
+	TMap<FGameplayTag, FSkillTreeManualLayoutElement> Nodes;
 	
 };

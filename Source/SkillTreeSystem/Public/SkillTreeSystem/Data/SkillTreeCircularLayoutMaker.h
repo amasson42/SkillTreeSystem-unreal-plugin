@@ -15,10 +15,10 @@ struct SKILLTREESYSTEM_API FSkillTreeCircularLayoutElement
 public:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FName Name;
+	FGameplayTag Name;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FName Parent;
+	FGameplayTag Parent;
 	
 };
 
@@ -32,7 +32,7 @@ class SKILLTREESYSTEM_API USkillTreeCircularLayoutMaker : public UDataAsset, pub
 	
 public:
 	
-	virtual void GetElementsPosition_Implementation(TMap<FName, FSkillTreeNodePosition>& NodePositions, TMap<FSkillTreeLinkName, FSkillTreeLinkPosition>& LinkPositions) override;
+	virtual void GetElementsPosition_Implementation(TMap<FGameplayTag, FSkillTreeNodePosition>& NodePositions, TMap<FSkillTreeLinkName, FSkillTreeLinkPosition>& LinkPositions) override;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Nodes")
 	TArray<FSkillTreeCircularLayoutElement> Nodes;

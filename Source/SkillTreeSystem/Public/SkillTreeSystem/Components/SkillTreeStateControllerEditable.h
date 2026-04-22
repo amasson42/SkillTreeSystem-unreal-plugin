@@ -15,7 +15,7 @@ struct SKILLTREESYSTEM_API FSkillTreeCategoryState
 
 public:
 
-	TMap<FName, FSkillTreeNodeState> NodeStates;
+	TMap<FGameplayTag, FSkillTreeNodeState> NodeStates;
 	TMap<FSkillTreeLinkName, FSkillTreeLinkState> LinkStates;
 	
 };
@@ -31,17 +31,17 @@ class SKILLTREESYSTEM_API USkillTreeStateControllerEditable : public USkillTreeS
 public:
 
 	UFUNCTION(BlueprintCallable, Category = "SkillTreeSystem")
-	void InitTreeWithSource(const FName& TreeCategory, TScriptInterface<ISkillTreeSourceInterface> Source);
+	void InitTreeWithSource(const FGameplayTag& TreeCategory, TScriptInterface<ISkillTreeSourceInterface> Source);
 	
-	virtual void GetNodeState(const FName& TreeCategory, const FName& NodeId, FSkillTreeNodeState& OutState) override;
+	virtual void GetNodeState(const FGameplayTag& TreeCategory, const FGameplayTag& NodeId, FSkillTreeNodeState& OutState) override;
 	
-	virtual void GetLinkState(const FName& TreeCategory, const FSkillTreeLinkName& LinkName, FSkillTreeLinkState& OutState) override;
+	virtual void GetLinkState(const FGameplayTag& TreeCategory, const FSkillTreeLinkName& LinkName, FSkillTreeLinkState& OutState) override;
 	
 	UFUNCTION(BlueprintCallable, Category = "SkillTreeState")
-	void SetNodeState(const FName& TreeCategory, const FName& NodeId, const FSkillTreeNodeState& InState);
+	void SetNodeState(const FGameplayTag& TreeCategory, const FGameplayTag& NodeId, const FSkillTreeNodeState& InState);
 	
 protected:
-
-	TMap<FName, FSkillTreeCategoryState> TreeStates;
+	
+	TMap<FGameplayTag, FSkillTreeCategoryState> TreeStates;
 	
 };

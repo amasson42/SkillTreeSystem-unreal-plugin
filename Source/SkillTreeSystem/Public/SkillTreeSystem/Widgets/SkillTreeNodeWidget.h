@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "SkillTreeSystem/Structures/SkillTreeCanvasStructures.h"
+#include "GameplayTagContainer.h"
 #include "SkillTreeNodeWidget.generated.h"
 
 class UCanvasPanelSlot;
@@ -34,7 +35,7 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "SkillTreeNode")
 	void SetSelected(bool bIsSelected);
 	
-	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnNodeEvent, USkillTreeNodeWidget*, Widget, const FName&, NodeId);
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnNodeEvent, USkillTreeNodeWidget*, Widget, const FGameplayTag&, NodeId);
 	
 	UPROPERTY(BlueprintAssignable, Category = "SkillTreeNode|Event")
 	FOnNodeEvent OnNodeClicked;
@@ -62,7 +63,7 @@ protected:
 protected:
 	
 	UPROPERTY(BlueprintReadOnly, Category = "SkillTreeNode", meta = (AllowPrivateAccess = true, ExposeOnSpawn = true))
-	FName NodeId;
+	FGameplayTag NodeId;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "SkillTreeNode", meta = (ExposeOnSpawn = true))
 	FSkillTreeNodeAppearance Appearance;

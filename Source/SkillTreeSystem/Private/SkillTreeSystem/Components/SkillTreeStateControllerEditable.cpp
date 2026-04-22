@@ -5,23 +5,23 @@
 
 #include "SkillTreeSystem/Interfaces/SkillTreeSourceInterface.h"
 
-void USkillTreeStateControllerEditable::InitTreeWithSource(const FName& TreeCategory, TScriptInterface<ISkillTreeSourceInterface> Source)
+void USkillTreeStateControllerEditable::InitTreeWithSource(const FGameplayTag& TreeCategory, TScriptInterface<ISkillTreeSourceInterface> Source)
 {
 	if (!(Source && IsValid(Source.GetObject()))) return;
 	
-	TArray<FName> Nodes;
+	TArray<FGameplayTag> Nodes;
 	ISkillTreeSourceInterface::Execute_GetNodesIds(Source.GetObject(), TreeCategory, Nodes);
 	TArray<FSkillTreeLinkName> Links;
 	ISkillTreeSourceInterface::Execute_GetLinks(Source.GetObject(), TreeCategory, Links);
 	
 	auto& TreeState = TreeStates.FindOrAdd(TreeCategory);
-	for (const FName& NodeId : Nodes)
+	for (const FGameplayTag& NodeId : Nodes)
 		TreeState.NodeStates.Add(NodeId);
 	for (const FSkillTreeLinkName& Link : Links)
 		TreeState.LinkStates.Add(Link);
 }
 
-void USkillTreeStateControllerEditable::GetNodeState(const FName& TreeCategory, const FName& NodeId, FSkillTreeNodeState& OutState)
+void USkillTreeStateControllerEditable::GetNodeState(const FGameplayTag& TreeCategory, const FGameplayTag& NodeId, FSkillTreeNodeState& OutState)
 {
 	if (auto* TreeState = TreeStates.Find(TreeCategory))
 	{
@@ -32,7 +32,7 @@ void USkillTreeStateControllerEditable::GetNodeState(const FName& TreeCategory, 
 	}
 }
 
-void USkillTreeStateControllerEditable::GetLinkState(const FName& TreeCategory, const FSkillTreeLinkName& LinkName, FSkillTreeLinkState& OutState)
+void USkillTreeStateControllerEditable::GetLinkState(const FGameplayTag& TreeCategory, const FSkillTreeLinkName& LinkName, FSkillTreeLinkState& OutState)
 {
 	if (auto* TreeState = TreeStates.Find(TreeCategory))
 	{
@@ -43,7 +43,7 @@ void USkillTreeStateControllerEditable::GetLinkState(const FName& TreeCategory, 
 	}
 }
 
-void USkillTreeStateControllerEditable::SetNodeState(const FName& TreeCategory, const FName& NodeId, const FSkillTreeNodeState& InState)
+void USkillTreeStateControllerEditable::SetNodeState(const FGameplayTag& TreeCategory, const FGameplayTag& NodeId, const FSkillTreeNodeState& InState)
 {
 	auto* TreeState = TreeStates.Find(TreeCategory);
 	

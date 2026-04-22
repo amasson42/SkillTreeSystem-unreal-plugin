@@ -7,7 +7,7 @@
 #include "SkillTreeSystem/Interfaces/SkillTreeSourceInterface.h"
 
 
-void USkillTreeWidget::SetSource(TScriptInterface<ISkillTreeSourceInterface> InSource, FName InTreeCategory)
+void USkillTreeWidget::SetSource(TScriptInterface<ISkillTreeSourceInterface> InSource, const FGameplayTag& InTreeCategory)
 {
 	Source = InSource;
 	TreeCategory = InTreeCategory;
@@ -24,7 +24,7 @@ void USkillTreeWidget::SetStateController(USkillTreeStateControllerBase* InState
 	if (!IsValid(InStateController))
 		return;
 	
-	TArray<FName> Nodes;
+	TArray<FGameplayTag> Nodes;
 	TArray<FSkillTreeLinkName> Links;
 
 	if (Source && IsValid(Source.GetObject()))
@@ -33,7 +33,7 @@ void USkillTreeWidget::SetStateController(USkillTreeStateControllerBase* InState
 		ISkillTreeSourceInterface::Execute_GetLinks(Source.GetObject(), TreeCategory, Links);
 	}
 	
-	for (const FName& NodeId : Nodes)
+	for (const FGameplayTag& NodeId : Nodes)
 	{
 		FSkillTreeNodeState NodeState;
 		InStateController->GetNodeState(TreeCategory, NodeId, NodeState);
@@ -88,7 +88,7 @@ void USkillTreeWidget::ClearStateController()
 	StateController.Reset();
 }
 
-void USkillTreeWidget::OnSkillTreeNodeUpdated(const FName& InTreeCategory, const FName& NodeId,
+void USkillTreeWidget::OnSkillTreeNodeUpdated(const FGameplayTag& InTreeCategory, const FGameplayTag& NodeId,
 	const FSkillTreeNodeState& State)
 {
 	if (InTreeCategory == TreeCategory)
@@ -97,7 +97,7 @@ void USkillTreeWidget::OnSkillTreeNodeUpdated(const FName& InTreeCategory, const
 	}
 }
 
-void USkillTreeWidget::OnSkillTreeLinkUpdated(const FName& InTreeCategory, const FSkillTreeLinkName& LinkName,
+void USkillTreeWidget::OnSkillTreeLinkUpdated(const FGameplayTag& InTreeCategory, const FSkillTreeLinkName& LinkName,
 	const FSkillTreeLinkState& State)
 {
 	if (InTreeCategory == TreeCategory)

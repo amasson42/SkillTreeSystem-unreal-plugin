@@ -4,7 +4,7 @@
 #include "SkillTreeSystem/Data/SkillTreeManualLayoutMaker.h"
 
 void USkillTreeManualLayoutMaker::GetElementsPosition_Implementation(
-	TMap<FName, FSkillTreeNodePosition>& NodePositions,
+	TMap<FGameplayTag, FSkillTreeNodePosition>& NodePositions,
 	TMap<FSkillTreeLinkName, FSkillTreeLinkPosition>& LinkPositions)
 {
 	for (const auto& [NodeId, NodeData] : Nodes)

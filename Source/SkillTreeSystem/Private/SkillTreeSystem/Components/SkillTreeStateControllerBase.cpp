@@ -3,7 +3,7 @@
 
 #include "SkillTreeSystem/Components/SkillTreeStateControllerBase.h"
 
-void USkillTreeStateControllerBase::RequestModifySkill(const FName& TreeCategory, const FName& NodeId, int32 NewLevel)
+void USkillTreeStateControllerBase::RequestModifySkill(const FGameplayTag& TreeCategory, const FGameplayTag& NodeId, int32 NewLevel)
 {
 	OnRequestPickSkill.Broadcast(TreeCategory, NodeId, NewLevel);
 }
