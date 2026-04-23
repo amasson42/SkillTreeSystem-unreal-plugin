@@ -33,14 +33,20 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "SkillTreeSystem")
 	void InitTreeWithSource(const FGameplayTag& TreeCategory, TScriptInterface<ISkillTreeSourceInterface> Source);
 	
-	virtual void GetNodeState(const FGameplayTag& TreeCategory, const FGameplayTag& NodeId, FSkillTreeNodeState& OutState) override;
+	virtual void GetNodeState(const FGameplayTag& TreeCategory, const FGameplayTag& NodeId, FSkillTreeNodeState& OutState) const override;
 	
-	virtual void GetLinkState(const FGameplayTag& TreeCategory, const FSkillTreeLinkName& LinkName, FSkillTreeLinkState& OutState) override;
+	virtual void GetLinkState(const FGameplayTag& TreeCategory, const FSkillTreeLinkName& LinkName, FSkillTreeLinkState& OutState) const override;
 	
-	virtual const FSkillTreeResourceContainer& GetResourceContainer() override;
+	virtual const FSkillTreeResourceContainer& GetResourceContainer() const override;
 	
 	UFUNCTION(BlueprintCallable, Category = "SkillTreeState")
 	void SetNodeState(const FGameplayTag& TreeCategory, const FGameplayTag& NodeId, const FSkillTreeNodeState& InState);
+	
+	UFUNCTION(BlueprintCallable, Category = "SkillTreeState")
+	void IncreaseNodeLevel(const FGameplayTag& TreeCategory, const FGameplayTag& NodeId, int32& NewLevel);
+	
+	UFUNCTION(BlueprintCallable, Category = "SkillTreeState")
+	void DecreaseNodeLevel(const FGameplayTag& TreeCategory, const FGameplayTag& NodeId, int32& NewLevel);
 	
 	UFUNCTION(BlueprintCallable, Category = "SkillTreeState")
 	void SetBoolResource(const FGameplayTag& ResourceName, bool Value);

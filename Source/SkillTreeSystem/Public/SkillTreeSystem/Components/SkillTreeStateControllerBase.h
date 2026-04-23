@@ -12,7 +12,7 @@
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnSkillTreeNodeUpdated, const FGameplayTag&, TreeCategory, const FGameplayTag&, NodeId, const FSkillTreeNodeState&, State);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnSkillTreeLinkUpdated, const FGameplayTag&, TreeCategory, const FSkillTreeLinkName&, LinkName, const FSkillTreeLinkState&, State);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnSkillTreeResourceUpdated, ESkillTreeResourceType, ResourceType, const FGameplayTag&, ResourceName);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnSkillTreeRequestModify, const FGameplayTag&, TreeCategory, const FGameplayTag&, NodeId, int32, NewLevel);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnSkillTreeModifySkillRequest, const FGameplayTag&, TreeCategory, const FGameplayTag&, NodeId);
 
 /**
  * 
@@ -25,13 +25,13 @@ class SKILLTREESYSTEM_API USkillTreeStateControllerBase : public UObject
 public:
 	
 	UFUNCTION(BlueprintCallable, Category = "SkillTreeController|State")
-	virtual void GetNodeState(const FGameplayTag& TreeCategory, const FGameplayTag& NodeId, FSkillTreeNodeState& OutState) {}
+	virtual void GetNodeState(const FGameplayTag& TreeCategory, const FGameplayTag& NodeId, FSkillTreeNodeState& OutState) const {}
 	
 	UFUNCTION(BlueprintCallable, Category = "SkillTreeController|State")
-	virtual void GetLinkState(const FGameplayTag& TreeCategory, const FSkillTreeLinkName& LinkName, FSkillTreeLinkState& OutState) {}
+	virtual void GetLinkState(const FGameplayTag& TreeCategory, const FSkillTreeLinkName& LinkName, FSkillTreeLinkState& OutState) const {}
 	
 	UFUNCTION(BlueprintCallable, Category = "SkillTreeController|State")
-	virtual const FSkillTreeResourceContainer& GetResourceContainer();
+	virtual const FSkillTreeResourceContainer& GetResourceContainer() const;
 	
 	UPROPERTY(BlueprintAssignable, Category = "SkillTreeController|State")
 	FOnSkillTreeNodeUpdated OnSkillTreeNodeUpdated;
@@ -42,10 +42,16 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "SkillTreeController|State")
 	FOnSkillTreeResourceUpdated OnSkillTreeResourceUpdated;
 	
-	UFUNCTION(BlueprintCallable, Category = "SkillTreeController|Request")
-	void RequestModifySkill(const FGameplayTag& TreeCategory, const FGameplayTag& NodeId, int32 NewLevel);
+	UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "SkillTreeController|Request")
+	void RequestIncreaseSkill(const FGameplayTag& TreeCategory, const FGameplayTag& NodeId) const;
 	
 	UPROPERTY(BlueprintAssignable, Category = "SkillTreeController|Request")
-	FOnSkillTreeRequestModify OnRequestPickSkill;
+	FOnSkillTreeModifySkillRequest OnRequestIncreaseSkill;
+	
+	UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "SkillTreeController|Request")
+	void RequestDecreaseSkill(const FGameplayTag& TreeCategory, const FGameplayTag& NodeId) const;
+	
+	UPROPERTY(BlueprintAssignable, Category = "SkillTreeController|Request")
+	FOnSkillTreeModifySkillRequest OnRequestDecreaseSkill;
 	
 };

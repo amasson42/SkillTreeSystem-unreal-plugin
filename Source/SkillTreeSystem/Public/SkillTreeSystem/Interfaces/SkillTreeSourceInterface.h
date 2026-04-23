@@ -22,7 +22,7 @@ class USkillTreeSourceInterface : public UInterface
  * Data source interface to implement to fill up skill tree ui.
  * A source may be used for different data tree. The TreeCategory is the name of the skill panel opened (eg. "FireSpells", "FrostSpells", "MeleeAbilities")
  */
-class SKILLTREESYSTEM_API ISkillTreeSourceInterface
+class SKILLTREESYSTEM_API ISkillTreeSourceInterface // Rename to SkillTreeCanvasSourceInterface interfaces
 {
 	GENERATED_BODY()
 

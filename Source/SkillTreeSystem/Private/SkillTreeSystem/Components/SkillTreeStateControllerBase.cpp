@@ -3,13 +3,18 @@
 
 #include "SkillTreeSystem/Components/SkillTreeStateControllerBase.h"
 
-const FSkillTreeResourceContainer& USkillTreeStateControllerBase::GetResourceContainer()
+const FSkillTreeResourceContainer& USkillTreeStateControllerBase::GetResourceContainer() const
 {
 	static FSkillTreeResourceContainer None;
 	return None;
 }
 
-void USkillTreeStateControllerBase::RequestModifySkill(const FGameplayTag& TreeCategory, const FGameplayTag& NodeId, int32 NewLevel)
+void USkillTreeStateControllerBase::RequestIncreaseSkill(const FGameplayTag& TreeCategory, const FGameplayTag& NodeId) const
 {
-	OnRequestPickSkill.Broadcast(TreeCategory, NodeId, NewLevel);
+	OnRequestIncreaseSkill.Broadcast(TreeCategory, NodeId);
+}
+
+void USkillTreeStateControllerBase::RequestDecreaseSkill(const FGameplayTag& TreeCategory, const FGameplayTag& NodeId) const
+{
+	OnRequestDecreaseSkill.Broadcast(TreeCategory, NodeId);
 }
