@@ -28,6 +28,7 @@ public class SkillTreeSystem : ModuleRules
 				"Core",
 				"UMG",
 				"GameplayTags",
+				"StructUtils",
 				// ... add other public dependencies that you statically link with here ...
 			}
 			);
