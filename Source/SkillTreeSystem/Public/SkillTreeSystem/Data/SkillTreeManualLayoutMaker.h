@@ -26,7 +26,7 @@ public:
 /**
  * 
  */
-UCLASS()
+UCLASS(BlueprintType)
 class SKILLTREESYSTEM_API USkillTreeManualLayoutMaker : public UDataAsset, public ISkillTreeLayoutMaker
 {
 	GENERATED_BODY()

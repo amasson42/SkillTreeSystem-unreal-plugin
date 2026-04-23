@@ -49,7 +49,7 @@ public:
 /**
  * Implementation of a mono tree and mono widget type and data driven node inputs
  */
-UCLASS()
+UCLASS(BlueprintType)
 class SKILLTREESYSTEM_API USkillTreeSourceDataAsset : public UDataAsset, public ISkillTreeSourceInterface
 {
 	GENERATED_BODY()
