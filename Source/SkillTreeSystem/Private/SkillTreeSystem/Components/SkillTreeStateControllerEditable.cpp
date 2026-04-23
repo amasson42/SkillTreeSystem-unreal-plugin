@@ -43,6 +43,11 @@ void USkillTreeStateControllerEditable::GetLinkState(const FGameplayTag& TreeCat
 	}
 }
 
+const FSkillTreeResourceContainer& USkillTreeStateControllerEditable::GetResourceContainer()
+{
+	return ResourceContainer;
+}
+
 void USkillTreeStateControllerEditable::SetNodeState(const FGameplayTag& TreeCategory, const FGameplayTag& NodeId, const FSkillTreeNodeState& InState)
 {
 	auto* TreeState = TreeStates.Find(TreeCategory);
@@ -70,3 +75,22 @@ void USkillTreeStateControllerEditable::SetNodeState(const FGameplayTag& TreeCat
 		}
 	}
 }
+
+void USkillTreeStateControllerEditable::SetBoolResource(const FGameplayTag& ResourceName, bool Value)
+{
+	ResourceContainer.SetBoolResource(ResourceName, Value);
+	OnSkillTreeResourceUpdated.Broadcast(ESkillTreeResourceType::Boolean, ResourceName);
+}
+
+void USkillTreeStateControllerEditable::SetScalarResource(const FGameplayTag& ResourceName, float Value)
+{
+	ResourceContainer.SetScalarResource(ResourceName, Value);
+	OnSkillTreeResourceUpdated.Broadcast(ESkillTreeResourceType::Scalar, ResourceName);
+}
+
+void USkillTreeStateControllerEditable::SetIntegerResource(const FGameplayTag& ResourceName, int32 Value)
+{
+	ResourceContainer.SetIntegerResource(ResourceName, Value);
+	OnSkillTreeResourceUpdated.Broadcast(ESkillTreeResourceType::Integer, ResourceName);
+}
+

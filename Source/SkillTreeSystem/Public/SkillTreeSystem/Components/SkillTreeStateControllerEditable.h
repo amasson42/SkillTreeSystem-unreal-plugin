@@ -37,11 +37,26 @@ public:
 	
 	virtual void GetLinkState(const FGameplayTag& TreeCategory, const FSkillTreeLinkName& LinkName, FSkillTreeLinkState& OutState) override;
 	
+	virtual const FSkillTreeResourceContainer& GetResourceContainer() override;
+	
 	UFUNCTION(BlueprintCallable, Category = "SkillTreeState")
 	void SetNodeState(const FGameplayTag& TreeCategory, const FGameplayTag& NodeId, const FSkillTreeNodeState& InState);
+	
+	UFUNCTION(BlueprintCallable, Category = "SkillTreeState")
+	void SetBoolResource(const FGameplayTag& ResourceName, bool Value);
+	
+	UFUNCTION(BlueprintCallable, Category = "SkillTreeState")
+	void SetScalarResource(const FGameplayTag& ResourceName, float Value);
+	
+	UFUNCTION(BlueprintCallable, Category = "SkillTreeState")
+	void SetIntegerResource(const FGameplayTag& ResourceName, int32 Value);
+	
+	// TODO: SetStructResource
 	
 protected:
 	
 	TMap<FGameplayTag, FSkillTreeCategoryState> TreeStates;
+	
+	FSkillTreeResourceContainer ResourceContainer;
 	
 };
