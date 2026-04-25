@@ -4,6 +4,7 @@
 #include "SkillTreeSystem/Structures/SkillTreeRequirementsStructures.h"
 
 #include "SkillTreeSystem/Components/SkillTreeStateControllerBase.h"
+#include "SkillTreeSystem/Requirements/SkillTreeRequirementPredicate.h"
 #include "SkillTreeSystem/ResourceContainer/SkillTreeResourceContainer.h"
 
 
@@ -44,13 +45,23 @@ bool FSkillTreeRequirement_IntegerResource::IsFulfilled(USkillTreeStateControlle
 	if (!IsValid(State)) return false;
 	
 	const FSkillTreeResourceContainer& ResourceContainer = State->GetResourceContainer();
-	const float Value = ResourceContainer.GetScalarResource(ResourceName);
+	const float Value = ResourceContainer.GetIntegerResource(ResourceName);
 	return Value >= MinValue;
+}
+
+bool FSkillTreeRequirement_ObjectPredicate::IsFulfilled(USkillTreeStateControllerBase* State) const
+{
+	if (!IsValid(State) || !PredicateClass) return false;
+	
+	const auto* Predicate = PredicateClass->GetDefaultObject<USkillTreeRequirementPredicate>();
+	if (!Predicate) return false;
+	
+	return Predicate->IsFulfilled(State);
 }
 
 bool FSkillTreeRequirements::GetFulfilled(USkillTreeStateControllerBase* State, TArray<int32>* UnfulfilledIndices) const
 {
-	bool Fulfilled = true;
+	bool bFulfilled = true;
 	
 	for (int32 i = 0; i < Requirements.Num(); i++)
 	{
@@ -60,11 +71,15 @@ bool FSkillTreeRequirements::GetFulfilled(USkillTreeStateControllerBase* State, 
 		
 		if (!Req->IsFulfilled(State))
 		{
-			Fulfilled = false;
 			if (UnfulfilledIndices)
+			{
 				UnfulfilledIndices->Add(i);
+				bFulfilled = false;
+			}
+			else
+				return false;
 		}
 	}
 	
-	return Fulfilled;
+	return bFulfilled;
 }

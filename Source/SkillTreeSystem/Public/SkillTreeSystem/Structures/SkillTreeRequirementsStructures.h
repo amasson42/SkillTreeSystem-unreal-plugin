@@ -9,7 +9,7 @@
 
 class USkillTreeStateControllerBase;
 
-USTRUCT()
+USTRUCT(BlueprintType)
 struct SKILLTREESYSTEM_API FSkillTreeRequirementBase
 {
 	GENERATED_BODY()
@@ -17,6 +17,9 @@ struct SKILLTREESYSTEM_API FSkillTreeRequirementBase
 public:
 	
 	virtual ~FSkillTreeRequirementBase() = default;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FText Description;
 	
 	virtual bool IsFulfilled(USkillTreeStateControllerBase* State) const;
 	
@@ -93,11 +96,19 @@ public:
 	
 };
 
-// TODO: FSkillTreeRequirement_ObjectPredicate
-// Parameters: TSubclassOf<USkillTreeRequirementPredicateClass>
-// class USkillTreeRequirementPredicateClass inherit from UObject (generate const class).
-// Has one function to inherit (IsFulfilled) that receive the state controller and return a boolean
-// FSkillTreeRequirement_ObjectPredicate::IsFulfilled will instanciate the class and ask it if it is fulfilled
+USTRUCT(BlueprintType)
+struct SKILLTREESYSTEM_API FSkillTreeRequirement_ObjectPredicate : public FSkillTreeRequirementBase
+{
+	GENERATED_BODY()
+	
+public:
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSubclassOf<class USkillTreeRequirementPredicate> PredicateClass;
+
+	virtual bool IsFulfilled(USkillTreeStateControllerBase* State) const override;
+	
+};
 
 USTRUCT(BlueprintType)
 struct SKILLTREESYSTEM_API FSkillTreeRequirements
