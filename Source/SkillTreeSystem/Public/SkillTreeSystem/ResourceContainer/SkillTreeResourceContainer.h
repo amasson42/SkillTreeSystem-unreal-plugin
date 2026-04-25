@@ -60,31 +60,60 @@ public:
 		IntegerResources.Add(ResourceName, Value);
 	}
 	
-	template <typename T>
-	void SetStructResource(const FGameplayTag& ResourceName, const T& Value)
+	const FInstancedStruct& GetStructResource(const FGameplayTag& ResourceName) const
 	{
-		StructResources.Add(ResourceName, FInstancedStruct::Make(Value));
+		const static FInstancedStruct NoneInstance;
+		if (const FInstancedStruct* ValuePtr = StructResources.Find(ResourceName))
+			return *ValuePtr;
+		return NoneInstance;
 	}
 	
-	template <typename T>
-	const T* GetStructResource(const FGameplayTag& ResourceName) const
+	void SetStructResource(const FGameplayTag& ResourceName, const FInstancedStruct& Value)
 	{
-		const FInstancedStruct* Entry = StructResources.Find(ResourceName);
-		if (!Entry) return nullptr;
-		return Entry->GetPtr<T>();
+		StructResources.Add(ResourceName, Value);
 	}
 	
-	template <typename T>
-	T* GetStructResourceMutable(const FGameplayTag& ResourceName)
+	FInstancedStruct* GetStructResourceMutable(const FGameplayTag& ResourceName)
 	{
-		FInstancedStruct* Entry = StructResources.Find(ResourceName);
-		if (!Entry) return nullptr;
-		return Entry->GetMutablePtr<T>();
+		return StructResources.Find(ResourceName);
+	}
+	
+	bool HasResource(ESkillTreeResourceType ResourceType, const FGameplayTag& ResourceName) const
+	{
+		switch (ResourceType)
+		{
+			case ESkillTreeResourceType::Boolean:
+				return BoolResources.Contains(ResourceName);
+			case ESkillTreeResourceType::Scalar:
+				return ScalarResources.Contains(ResourceName);
+			case ESkillTreeResourceType::Integer:
+				return IntegerResources.Contains(ResourceName);
+			case ESkillTreeResourceType::Structure:
+				return StructResources.Contains(ResourceName);
+		}
+		return false;
+	}
+	
+	void RemoveResource(ESkillTreeResourceType ResourceType, const FGameplayTag& ResourceName)
+	{
+		switch (ResourceType)
+		{
+			case ESkillTreeResourceType::Boolean:
+				BoolResources.Remove(ResourceName);
+				break;
+			case ESkillTreeResourceType::Scalar:
+				ScalarResources.Remove(ResourceName);
+				break;
+			case ESkillTreeResourceType::Integer:
+				IntegerResources.Remove(ResourceName);
+				break;
+			case ESkillTreeResourceType::Structure:
+				StructResources.Remove(ResourceName);
+				break;
+		}
 	}
 	
 private:
-	
-	friend class USkillTreeResourceContainerLibrary;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	TSet<FGameplayTag> BoolResources;

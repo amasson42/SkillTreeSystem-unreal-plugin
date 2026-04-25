@@ -3,32 +3,52 @@
 
 #include "SkillTreeSystem/ResourceContainer/SkillTreeResourceContainerLibrary.h"
 
-bool USkillTreeResourceContainerLibrary::GetBoolResource(const FSkillTreeResourceContainer& Container, FGameplayTag Tag)
+bool USkillTreeResourceContainerLibrary::GetBoolResource(const FSkillTreeResourceContainer& Container, FGameplayTag ResourceName)
 {
-	return Container.GetBoolResource(Tag);
+	return Container.GetBoolResource(ResourceName);
 }
 
-void USkillTreeResourceContainerLibrary::SetBoolResource(FSkillTreeResourceContainer& Container, FGameplayTag Tag, bool Value)
+void USkillTreeResourceContainerLibrary::SetBoolResource(FSkillTreeResourceContainer& Container, FGameplayTag ResourceName, bool Value)
 {
-	Container.SetBoolResource(Tag, Value);
+	Container.SetBoolResource(ResourceName, Value);
 }
 
-float USkillTreeResourceContainerLibrary::GetScalarResource(const FSkillTreeResourceContainer& Container, FGameplayTag Tag)
+float USkillTreeResourceContainerLibrary::GetScalarResource(const FSkillTreeResourceContainer& Container, FGameplayTag ResourceName)
 {
-	return Container.GetScalarResource(Tag);
+	return Container.GetScalarResource(ResourceName);
 }
 
-void USkillTreeResourceContainerLibrary::SetScalarResource(FSkillTreeResourceContainer& Container, FGameplayTag Tag, float Value)
+void USkillTreeResourceContainerLibrary::SetScalarResource(FSkillTreeResourceContainer& Container, FGameplayTag ResourceName, float Value)
 {
-	Container.SetScalarResource(Tag, Value);
+	Container.SetScalarResource(ResourceName, Value);
 }
 
-int32 USkillTreeResourceContainerLibrary::GetIntegerResource(const FSkillTreeResourceContainer& Container, FGameplayTag Tag)
+int32 USkillTreeResourceContainerLibrary::GetIntegerResource(const FSkillTreeResourceContainer& Container, FGameplayTag ResourceName)
 {
-	return Container.GetIntegerResource(Tag);
+	return Container.GetIntegerResource(ResourceName);
 }
 
-void USkillTreeResourceContainerLibrary::SetIntegerResource(FSkillTreeResourceContainer& Container, FGameplayTag Tag, int32 Value)
+void USkillTreeResourceContainerLibrary::SetIntegerResource(FSkillTreeResourceContainer& Container, FGameplayTag ResourceName, int32 Value)
 {
-	Container.SetIntegerResource(Tag, Value);
+	Container.SetIntegerResource(ResourceName, Value);
+}
+
+const FInstancedStruct& USkillTreeResourceContainerLibrary::GetStructResource(const FSkillTreeResourceContainer& Container, FGameplayTag ResourceName)
+{
+	return Container.GetStructResource(ResourceName);
+}
+
+void USkillTreeResourceContainerLibrary::SetStructResource(FSkillTreeResourceContainer& Container, FGameplayTag ResourceName, const FInstancedStruct& Value)
+{
+	Container.SetStructResource(ResourceName, Value);
+}
+
+bool USkillTreeResourceContainerLibrary::HasResource(const FSkillTreeResourceContainer& Container, ESkillTreeResourceType ResourceType, FGameplayTag ResourceName)
+{
+	return Container.HasResource(ResourceType, ResourceName);
+}
+
+void USkillTreeResourceContainerLibrary::RemoveResource(FSkillTreeResourceContainer& Container, ESkillTreeResourceType ResourceType, FGameplayTag ResourceName)
+{
+	Container.RemoveResource(ResourceType, ResourceName);
 }
