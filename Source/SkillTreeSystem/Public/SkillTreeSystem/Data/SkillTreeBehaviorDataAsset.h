@@ -5,9 +5,25 @@
 #include "CoreMinimal.h"
 #include "GameplayTagContainer.h"
 #include "Engine/DataAsset.h"
+#include "SkillTreeSystem/Interfaces/SkillTreeBehaviorInterface.h"
 #include "SkillTreeSystem/Structures/SkillTreeCoreStructures.h"
 #include "SkillTreeSystem/Structures/SkillTreeRequirementsStructures.h"
 #include "SkillTreeBehaviorDataAsset.generated.h"
+
+USTRUCT(BlueprintType)
+struct SKILLTREESYSTEM_API FSkillTreeBehaviorLevelData
+{
+	GENERATED_BODY()
+	
+public:
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Requirements")
+	FSkillTreeRequirements Requirements;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Requirements")
+	bool bIgnoreGlobalRequirements = false;
+	
+};
 
 USTRUCT(BlueprintType)
 struct SKILLTREESYSTEM_API FSkillTreeBehaviorDataAssetElement
@@ -16,8 +32,8 @@ struct SKILLTREESYSTEM_API FSkillTreeBehaviorDataAssetElement
 	
 public:
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TArray<FSkillTreeRequirements> LevelUpgradeRequirements;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Levels")
+	TArray<FSkillTreeBehaviorLevelData> Levels;
 	
 };
 
@@ -25,23 +41,23 @@ public:
  * 
  */
 UCLASS(BlueprintType)
-class SKILLTREESYSTEM_API USkillTreeBehaviorDataAsset : public UDataAsset
+class SKILLTREESYSTEM_API USkillTreeBehaviorDataAsset : public UDataAsset, public ISkillTreeBehaviorInterface
 {
 	GENERATED_BODY()
 	
 public:
 	
-	UFUNCTION(BlueprintCallable, Category = "SkillTreeSystem")
-	bool CanUpgradeNode(const FGameplayTag& NodeId, USkillTreeStateControllerBase* State) const;
-	
-	UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "SkillTreeSystem")
-	void UpdateNodeState(const FGameplayTag& NodeId, USkillTreeStateControllerEditable* State) const;
+	virtual bool CanUpgradeNode_Implementation(const FGameplayTag& NodeId, USkillTreeStateControllerBase* State) override;
+	virtual void UpdateNodeState_Implementation(const FGameplayTag& NodeId, USkillTreeStateControllerEditable* State) override;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Data")
 	FGameplayTag TreeCategory;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Data")
 	TMap<FGameplayTag, FSkillTreeBehaviorDataAssetElement> Nodes;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Requirements")
+	FSkillTreeRequirements GlobalRequirements;
 	
 private:
 	

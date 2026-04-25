@@ -6,12 +6,12 @@
 #include "SkillTreeSystem/Components/SkillTreeStateControllerBase.h"
 #include "SkillTreeSystem/Components/SkillTreeStateControllerEditable.h"
 
-bool USkillTreeBehaviorDataAsset::CanUpgradeNode(const FGameplayTag& NodeId, USkillTreeStateControllerBase* State) const
+bool USkillTreeBehaviorDataAsset::CanUpgradeNode_Implementation(const FGameplayTag& NodeId, USkillTreeStateControllerBase* State)
 {
 	return _CanUpgradeNode(NodeId, State);
 }
 
-void USkillTreeBehaviorDataAsset::UpdateNodeState(const FGameplayTag& NodeId, USkillTreeStateControllerEditable* State) const
+void USkillTreeBehaviorDataAsset::UpdateNodeState_Implementation(const FGameplayTag& NodeId, USkillTreeStateControllerEditable* State)
 {
 	const auto* NodeBehavior = Nodes.Find(NodeId);
 	if (!NodeBehavior) return;
@@ -35,9 +35,9 @@ void USkillTreeBehaviorDataAsset::UpdateNodeState(const FGameplayTag& NodeId, US
 		bModified = true;
 	}
 	
-	if (NewNodeState.MaxLevel != NodeBehavior->LevelUpgradeRequirements.Num())
+	if (NewNodeState.MaxLevel != NodeBehavior->Levels.Num())
 	{
-		NewNodeState.MaxLevel = NodeBehavior->LevelUpgradeRequirements.Num();
+		NewNodeState.MaxLevel = NodeBehavior->Levels.Num();
 		bModified = true;
 	}
 	
@@ -69,13 +69,23 @@ bool USkillTreeBehaviorDataAsset::_CanUpgradeNode(
 	const auto* NodeBehavior = CachedBehavior ? CachedBehavior : Nodes.Find(NodeId);
 	if (!NodeBehavior) return false;
 	
-	if (NodeState.Level >= NodeBehavior->LevelUpgradeRequirements.Num())
+	if (NodeState.Level >= NodeBehavior->Levels.Num())
 		return false;
 	
 	if (NodeState.Level < 0)
 		return false;
 	
-	if (!NodeBehavior->LevelUpgradeRequirements[NodeState.Level].GetFulfilled(State))
+	const auto& LevelData = NodeBehavior->Levels[NodeState.Level];
+	
+	if (!LevelData.bIgnoreGlobalRequirements)
+	{
+		TArray<int32> ErroredReasons;
+		if (!GlobalRequirements.GetFulfilled(State, &ErroredReasons))
+			return false;
+	}
+	
+	TArray<int32> ErroredReasons;
+	if (!LevelData.Requirements.GetFulfilled(State, &ErroredReasons))
 		return false;
 	
 	return true;
