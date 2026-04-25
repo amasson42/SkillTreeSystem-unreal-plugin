@@ -43,21 +43,19 @@ public:
 	void SetNodeState(const FGameplayTag& TreeCategory, const FGameplayTag& NodeId, const FSkillTreeNodeState& InState);
 	
 	UFUNCTION(BlueprintCallable, Category = "SkillTreeState")
-	void IncreaseNodeLevel(const FGameplayTag& TreeCategory, const FGameplayTag& NodeId, int32& NewLevel);
+	void SetNodeLevel(const FGameplayTag& TreeCategory, const FGameplayTag& NodeId, int32 NewLevel);
 	
-	UFUNCTION(BlueprintCallable, Category = "SkillTreeState")
-	void DecreaseNodeLevel(const FGameplayTag& TreeCategory, const FGameplayTag& NodeId, int32& NewLevel);
+	UFUNCTION(BlueprintCallable, Category = "SkillTreeState|Resources")
+	void SetBoolResource(FGameplayTag ResourceName, bool Value);
 	
-	UFUNCTION(BlueprintCallable, Category = "SkillTreeState")
-	void SetBoolResource(const FGameplayTag& ResourceName, bool Value);
+	UFUNCTION(BlueprintCallable, Category = "SkillTreeState|Resources")
+	void SetScalarResource(FGameplayTag ResourceName, float Value);
 	
-	UFUNCTION(BlueprintCallable, Category = "SkillTreeState")
-	void SetScalarResource(const FGameplayTag& ResourceName, float Value);
+	UFUNCTION(BlueprintCallable, Category = "SkillTreeState|Resources")
+	void SetIntegerResource(FGameplayTag ResourceName, int32 Value);
 	
-	UFUNCTION(BlueprintCallable, Category = "SkillTreeState")
-	void SetIntegerResource(const FGameplayTag& ResourceName, int32 Value);
-	
-	// TODO: SetStructResource
+	UFUNCTION(BlueprintCallable, Category = "SkillTreeState|Resources")
+	void SetStructResource(FGameplayTag ResourceName, const FInstancedStruct& Value);
 	
 protected:
 	
