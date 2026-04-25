@@ -61,10 +61,18 @@ protected:
 private:
 
 	UFUNCTION()
-	void OnSkillTreeNodeUpdated(const FGameplayTag& InTreeCategory, const FGameplayTag& NodeId, const FSkillTreeNodeState& State);
+	void OnSkillTreeNodeUpdated(
+		USkillTreeStateControllerBase* Controller,
+		const FGameplayTag& InTreeCategory,
+		const FGameplayTag& NodeId,
+		const FSkillTreeNodeState& State);
 	
 	UFUNCTION()
-	void OnSkillTreeLinkUpdated(const FGameplayTag& InTreeCategory, const FSkillTreeLinkName& LinkName, const FSkillTreeLinkState& State);
+	void OnSkillTreeLinkUpdated(
+		USkillTreeStateControllerBase* Controller,
+		const FGameplayTag& InTreeCategory,
+		const FSkillTreeLinkName& LinkName,
+		const FSkillTreeLinkState& State);
 	
 	void OnSourceUpdatedCheck();
 };

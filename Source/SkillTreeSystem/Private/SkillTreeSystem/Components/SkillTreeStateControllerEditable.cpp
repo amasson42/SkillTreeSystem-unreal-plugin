@@ -56,7 +56,7 @@ void USkillTreeStateControllerEditable::SetNodeState(const FGameplayTag& TreeCat
 	if (auto* Node = TreeState->NodeStates.Find(NodeId))
 	{
 		*Node = InState;
-		OnSkillTreeNodeUpdated.Broadcast(TreeCategory, NodeId, InState);
+		OnSkillTreeNodeUpdated.Broadcast(this, TreeCategory, NodeId, InState);
 	}
 	
 	for (auto& [LinkName, LinkState] : TreeState->LinkStates)
@@ -69,7 +69,7 @@ void USkillTreeStateControllerEditable::SetNodeState(const FGameplayTag& TreeCat
 			if (StartState && EndState)
 			{
 				LinkState.InitFromNodeStates(*StartState, *EndState);
-				OnSkillTreeLinkUpdated.Broadcast(TreeCategory, LinkName, LinkState);
+				OnSkillTreeLinkUpdated.Broadcast(this, TreeCategory, LinkName, LinkState);
 			}
 		}
 	}
@@ -86,23 +86,23 @@ void USkillTreeStateControllerEditable::SetNodeLevel(const FGameplayTag& TreeCat
 void USkillTreeStateControllerEditable::SetBoolResource(FGameplayTag ResourceName, bool Value)
 {
 	ResourceContainer.SetBoolResource(ResourceName, Value);
-	OnSkillTreeResourceUpdated.Broadcast(ESkillTreeResourceType::Boolean, ResourceName);
+	OnSkillTreeResourceUpdated.Broadcast(this, ESkillTreeResourceType::Boolean, ResourceName);
 }
 
 void USkillTreeStateControllerEditable::SetScalarResource(FGameplayTag ResourceName, float Value)
 {
 	ResourceContainer.SetScalarResource(ResourceName, Value);
-	OnSkillTreeResourceUpdated.Broadcast(ESkillTreeResourceType::Scalar, ResourceName);
+	OnSkillTreeResourceUpdated.Broadcast(this, ESkillTreeResourceType::Scalar, ResourceName);
 }
 
 void USkillTreeStateControllerEditable::SetIntegerResource(FGameplayTag ResourceName, int32 Value)
 {
 	ResourceContainer.SetIntegerResource(ResourceName, Value);
-	OnSkillTreeResourceUpdated.Broadcast(ESkillTreeResourceType::Integer, ResourceName);
+	OnSkillTreeResourceUpdated.Broadcast(this, ESkillTreeResourceType::Integer, ResourceName);
 }
 
 void USkillTreeStateControllerEditable::SetStructResource(FGameplayTag ResourceName, const FInstancedStruct& Value)
 {
 	ResourceContainer.SetStructResource(ResourceName, Value);
-	OnSkillTreeResourceUpdated.Broadcast(ESkillTreeResourceType::Structure, ResourceName);
+	OnSkillTreeResourceUpdated.Broadcast(this, ESkillTreeResourceType::Structure, ResourceName);
 }

@@ -88,18 +88,26 @@ void USkillTreeWidget::ClearStateController()
 	StateController.Reset();
 }
 
-void USkillTreeWidget::OnSkillTreeNodeUpdated(const FGameplayTag& InTreeCategory, const FGameplayTag& NodeId,
+void USkillTreeWidget::OnSkillTreeNodeUpdated(
+	USkillTreeStateControllerBase* Controller,
+	const FGameplayTag& InTreeCategory,
+	const FGameplayTag& NodeId,
 	const FSkillTreeNodeState& State)
 {
+	check(Controller == StateController);
 	if (InTreeCategory == TreeCategory)
 	{
 		OnNodeStateUpdated(NodeId, State);
 	}
 }
 
-void USkillTreeWidget::OnSkillTreeLinkUpdated(const FGameplayTag& InTreeCategory, const FSkillTreeLinkName& LinkName,
+void USkillTreeWidget::OnSkillTreeLinkUpdated(
+	USkillTreeStateControllerBase* Controller,
+	const FGameplayTag& InTreeCategory,
+	const FSkillTreeLinkName& LinkName,
 	const FSkillTreeLinkState& State)
 {
+	check(Controller == StateController);
 	if (InTreeCategory == TreeCategory)
 	{
 		OnLinkStateUpdated(LinkName, State);
