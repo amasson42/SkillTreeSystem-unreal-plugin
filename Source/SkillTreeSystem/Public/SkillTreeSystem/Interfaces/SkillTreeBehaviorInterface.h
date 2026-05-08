@@ -4,54 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "GameplayTagContainer.h"
-#include "SkillTreeSystem/ResourceContainer/SkillTreeResourceContainer.h"
+#include "SkillTreeSystem/Requirements/SkillTreeBehaviorInterestStructures.h"
 #include "UObject/Interface.h"
 #include "SkillTreeBehaviorInterface.generated.h"
 
-USTRUCT(BlueprintType)
-struct SKILLTREESYSTEM_API FSkillTreeBehaviorSkillInterest
-{
-	GENERATED_BODY()
-	
-public:
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FGameplayTag TreeName;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FGameplayTag SkillName;
-	
-};
-
-USTRUCT(BlueprintType)
-struct SKILLTREESYSTEM_API FSkillTreeBehaviorResourceInterest
-{
-	GENERATED_BODY()
-	
-public:
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	ESkillTreeResourceType ResourceType;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FGameplayTag ResourceName;
-	
-};
-
-USTRUCT(BlueprintType)
-struct SKILLTREESYSTEM_API FSkillTreeBehaviorInterest
-{
-	GENERATED_BODY()
-	
-public:
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TArray<FSkillTreeBehaviorSkillInterest> SkillInterest;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TArray<FSkillTreeBehaviorResourceInterest> ResourceInterests;
-	
-};
 
 // This class does not need to be modified.
 UINTERFACE()
@@ -71,9 +27,12 @@ class SKILLTREESYSTEM_API ISkillTreeBehaviorInterface
 public:
 	
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "SkillTreeBehavior")
-	bool CanUpgradeNode(const FGameplayTag& NodeId, USkillTreeStateControllerBase* State);
+	bool CanUpgradeNode(const FGameplayTag& NodeId, USkillTreeStateControllerBase* State) const;
 	
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "SkillTreeBehavior")
 	void UpdateNodeState(const FGameplayTag& NodeId, USkillTreeStateControllerEditable* State);
+	
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "SkillTreeBehavior")
+	void GatherInterestsForNode(const FGameplayTag& NodeId, FSkillTreeBehaviorInterest& Interests);
 	
 };

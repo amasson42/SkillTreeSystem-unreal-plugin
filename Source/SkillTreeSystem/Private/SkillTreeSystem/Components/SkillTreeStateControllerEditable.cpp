@@ -53,11 +53,13 @@ void USkillTreeStateControllerEditable::SetNodeState(const FGameplayTag& TreeCat
 	auto* TreeState = TreeStates.Find(TreeCategory);
 	if (!TreeState) return;
 	
-	if (auto* Node = TreeState->NodeStates.Find(NodeId))
-	{
-		*Node = InState;
-		OnSkillTreeNodeUpdated.Broadcast(this, TreeCategory, NodeId, InState);
-	}
+	auto* NodeState = TreeState->NodeStates.Find(NodeId);
+	if (!NodeState) return;
+	
+	if (*NodeState == InState) return;
+	
+	*NodeState = InState;
+	OnSkillTreeNodeUpdated.Broadcast(this, TreeCategory, NodeId, InState);
 	
 	for (auto& [LinkName, LinkState] : TreeState->LinkStates)
 	{
@@ -68,8 +70,8 @@ void USkillTreeStateControllerEditable::SetNodeState(const FGameplayTag& TreeCat
 			
 			if (StartState && EndState)
 			{
-				LinkState.InitFromNodeStates(*StartState, *EndState);
-				OnSkillTreeLinkUpdated.Broadcast(this, TreeCategory, LinkName, LinkState);
+				if (LinkState.SetFromNodeStates(*StartState, *EndState))
+					OnSkillTreeLinkUpdated.Broadcast(this, TreeCategory, LinkName, LinkState);
 			}
 		}
 	}

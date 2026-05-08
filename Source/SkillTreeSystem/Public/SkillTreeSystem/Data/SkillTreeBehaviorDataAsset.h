@@ -47,8 +47,9 @@ class SKILLTREESYSTEM_API USkillTreeBehaviorDataAsset : public UDataAsset, publi
 	
 public:
 	
-	virtual bool CanUpgradeNode_Implementation(const FGameplayTag& NodeId, USkillTreeStateControllerBase* State) override;
+	virtual bool CanUpgradeNode_Implementation(const FGameplayTag& NodeId, USkillTreeStateControllerBase* State) const override;
 	virtual void UpdateNodeState_Implementation(const FGameplayTag& NodeId, USkillTreeStateControllerEditable* State) override;
+	virtual void GatherInterestsForNode_Implementation(const FGameplayTag& NodeId, FSkillTreeBehaviorInterest& Interests) override;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Data")
 	FGameplayTag TreeCategory;

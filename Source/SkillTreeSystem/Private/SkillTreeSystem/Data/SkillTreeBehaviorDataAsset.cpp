@@ -6,7 +6,7 @@
 #include "SkillTreeSystem/Components/SkillTreeStateControllerBase.h"
 #include "SkillTreeSystem/Components/SkillTreeStateControllerEditable.h"
 
-bool USkillTreeBehaviorDataAsset::CanUpgradeNode_Implementation(const FGameplayTag& NodeId, USkillTreeStateControllerBase* State)
+bool USkillTreeBehaviorDataAsset::CanUpgradeNode_Implementation(const FGameplayTag& NodeId, USkillTreeStateControllerBase* State) const
 {
 	return _CanUpgradeNode(NodeId, State);
 }
@@ -52,6 +52,21 @@ void USkillTreeBehaviorDataAsset::UpdateNodeState_Implementation(const FGameplay
 	
 	if (bModified)
 		State->SetNodeState(TreeCategory, NodeId, NewNodeState);
+}
+
+void USkillTreeBehaviorDataAsset::GatherInterestsForNode_Implementation(const FGameplayTag& NodeId, FSkillTreeBehaviorInterest& Interests)
+{
+	const auto* NodeBehavior = Nodes.Find(NodeId);
+	if (!NodeBehavior) return;
+	
+	for (const auto& LevelData : NodeBehavior->Levels)
+	{
+		LevelData.Requirements.GatherInterests(Interests);
+		if (!LevelData.bIgnoreGlobalRequirements)
+		{
+			GlobalRequirements.GatherInterests(Interests);
+		}
+	}
 }
 
 bool USkillTreeBehaviorDataAsset::_CanUpgradeNode(

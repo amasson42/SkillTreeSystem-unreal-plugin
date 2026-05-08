@@ -21,4 +21,7 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, Category = "SkillTree|Requirement")
 	bool IsFulfilled(USkillTreeStateControllerBase* State) const;
 	
+	UFUNCTION(BlueprintImplementableEvent, Category = "SkillTree|Requirement")
+	void GatherInterests(FSkillTreeBehaviorInterest& OutInterests) const;
+	
 };

@@ -60,6 +60,12 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 MaxLevel = 1;
 	
+	bool operator==(const FSkillTreeNodeState& Other) const
+	{
+		return Status == Other.Status
+			&& Level == Other.Level
+			&& MaxLevel == Other.MaxLevel;
+	}
 };
 
 USTRUCT(BlueprintType)
@@ -71,9 +77,13 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	ESkillTreeElementStatus Status = ESkillTreeElementStatus::Locked;
-
-	void InitFromNodeStates(const FSkillTreeNodeState& Start, const FSkillTreeNodeState& End)
+	
+	bool SetFromNodeStates(const FSkillTreeNodeState& Start, const FSkillTreeNodeState& End)
 	{
-		Status = FMath::Min(Start.Status, End.Status);
+		auto NewStatus = FMath::Min(Start.Status, End.Status);
+		if (NewStatus == Status) return false;
+		Status = NewStatus;
+		return true;
 	}
+	
 };

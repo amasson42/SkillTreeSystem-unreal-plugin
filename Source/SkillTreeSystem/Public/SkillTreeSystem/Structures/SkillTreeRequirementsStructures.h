@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameplayTagContainer.h"
+#include "SkillTreeSystem/Requirements/SkillTreeBehaviorInterestStructures.h"
 #include "StructUtils/InstancedStruct.h"
 #include "SkillTreeRequirementsStructures.generated.h"
 
@@ -22,6 +23,7 @@ public:
 	FText Description;
 	
 	virtual bool IsFulfilled(USkillTreeStateControllerBase* State) const;
+	virtual void GatherInterests(FSkillTreeBehaviorInterest& Interests) const;
 	
 };
 
@@ -42,6 +44,7 @@ public:
 	int32 MinLevel = 1;
 	
 	virtual bool IsFulfilled(USkillTreeStateControllerBase* State) const override;
+	virtual void GatherInterests(FSkillTreeBehaviorInterest& Interests) const override;
 	
 };
 
@@ -59,6 +62,7 @@ public:
 	bool ExpectTrue = true;
 	
 	virtual bool IsFulfilled(USkillTreeStateControllerBase* State) const override;
+	virtual void GatherInterests(FSkillTreeBehaviorInterest& Interests) const override;
 	
 };
 
@@ -76,6 +80,7 @@ public:
 	float MinQuantity = 1.0f;
 	
 	virtual bool IsFulfilled(USkillTreeStateControllerBase* State) const override;
+	virtual void GatherInterests(FSkillTreeBehaviorInterest& Interests) const override;
 	
 };
 
@@ -93,6 +98,7 @@ public:
 	int32 MinValue = 1;
 	
 	virtual bool IsFulfilled(USkillTreeStateControllerBase* State) const override;
+	virtual void GatherInterests(FSkillTreeBehaviorInterest& Interests) const override;
 	
 };
 
@@ -107,6 +113,7 @@ public:
 	TSubclassOf<class USkillTreeRequirementPredicate> PredicateClass;
 
 	virtual bool IsFulfilled(USkillTreeStateControllerBase* State) const override;
+	virtual void GatherInterests(FSkillTreeBehaviorInterest& Interests) const override;
 	
 };
 
@@ -121,5 +128,6 @@ public:
 	TArray<FInstancedStruct> Requirements;
 	
 	bool GetFulfilled(USkillTreeStateControllerBase* State, TArray<int32>* UnfulfilledIndices = nullptr) const;
+	void GatherInterests(FSkillTreeBehaviorInterest& Interests) const;
 	
 };
