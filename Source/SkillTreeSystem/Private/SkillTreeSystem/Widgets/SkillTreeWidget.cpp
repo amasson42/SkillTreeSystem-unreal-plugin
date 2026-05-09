@@ -3,8 +3,8 @@
 
 #include "SkillTreeSystem/Widgets/SkillTreeWidget.h"
 
-#include "SkillTreeSystem/Components/SkillTreeStateControllerBase.h"
-#include "SkillTreeSystem/Interfaces/SkillTreeSourceInterface.h"
+#include "SkillTreeSystem/StateController/SkillTreeStateControllerBase.h"
+#include "SkillTreeSystem/CanvasSource/SkillTreeSourceInterface.h"
 
 
 void USkillTreeWidget::SetSource(TScriptInterface<ISkillTreeSourceInterface> InSource, const FGameplayTag& InTreeCategory)

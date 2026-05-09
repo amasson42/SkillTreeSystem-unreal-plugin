@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "SkillTreeSystem/Structures/SkillTreeCanvasStructures.h"
+#include "SkillTreeSystem/CanvasSource/SkillTreeCanvasStructures.h"
 #include "SkillTreeLinkWidget.generated.h"
 
 /**

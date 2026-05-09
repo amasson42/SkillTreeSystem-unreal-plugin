@@ -35,7 +35,7 @@ protected:
 #if WITH_EDITOR
 	virtual void NativePreConstruct() override;
 #endif
-
+	
 	void ClearStateController();
 	
 	UFUNCTION(BlueprintImplementableEvent, Category = "SkillTree")
