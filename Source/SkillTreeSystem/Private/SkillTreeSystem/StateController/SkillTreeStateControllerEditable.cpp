@@ -3,16 +3,16 @@
 
 #include "SkillTreeSystem/StateController/SkillTreeStateControllerEditable.h"
 
-#include "SkillTreeSystem/CanvasSource/SkillTreeSourceInterface.h"
+#include "SkillTreeSystem/CanvasSource/SkillTreeCanvasSourceInterface.h"
 
-void USkillTreeStateControllerEditable::InitTreeWithSource(const FGameplayTag& TreeCategory, TScriptInterface<ISkillTreeSourceInterface> Source)
+void USkillTreeStateControllerEditable::InitTreeWithSource(const FGameplayTag& TreeCategory, TScriptInterface<ISkillTreeCanvasSourceInterface> Source)
 {
 	if (!(Source && IsValid(Source.GetObject()))) return;
 	
 	TArray<FGameplayTag> Nodes;
-	ISkillTreeSourceInterface::Execute_GetNodesIds(Source.GetObject(), TreeCategory, Nodes);
+	ISkillTreeCanvasSourceInterface::Execute_GetNodesIds(Source.GetObject(), Nodes);
 	TArray<FSkillTreeLinkName> Links;
-	ISkillTreeSourceInterface::Execute_GetLinks(Source.GetObject(), TreeCategory, Links);
+	ISkillTreeCanvasSourceInterface::Execute_GetLinks(Source.GetObject(), Links);
 	
 	auto& TreeState = TreeStates.FindOrAdd(TreeCategory);
 	for (const FGameplayTag& NodeId : Nodes)

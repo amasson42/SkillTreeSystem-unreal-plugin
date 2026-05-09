@@ -4,10 +4,10 @@
 #include "SkillTreeSystem/Widgets/SkillTreeWidget.h"
 
 #include "SkillTreeSystem/StateController/SkillTreeStateControllerBase.h"
-#include "SkillTreeSystem/CanvasSource/SkillTreeSourceInterface.h"
+#include "SkillTreeSystem/CanvasSource/SkillTreeCanvasSourceInterface.h"
 
 
-void USkillTreeWidget::SetSource(TScriptInterface<ISkillTreeSourceInterface> InSource, const FGameplayTag& InTreeCategory)
+void USkillTreeWidget::SetSource(TScriptInterface<ISkillTreeCanvasSourceInterface> InSource, const FGameplayTag& InTreeCategory)
 {
 	Source = InSource;
 	TreeCategory = InTreeCategory;
@@ -29,8 +29,8 @@ void USkillTreeWidget::SetStateController(USkillTreeStateControllerBase* InState
 
 	if (Source && IsValid(Source.GetObject()))
 	{
-		ISkillTreeSourceInterface::Execute_GetNodesIds(Source.GetObject(), TreeCategory, Nodes);	
-		ISkillTreeSourceInterface::Execute_GetLinks(Source.GetObject(), TreeCategory, Links);
+		ISkillTreeCanvasSourceInterface::Execute_GetNodesIds(Source.GetObject(), Nodes);	
+		ISkillTreeCanvasSourceInterface::Execute_GetLinks(Source.GetObject(), Links);
 	}
 	
 	for (const FGameplayTag& NodeId : Nodes)
@@ -47,7 +47,7 @@ void USkillTreeWidget::SetStateController(USkillTreeStateControllerBase* InState
 	{
 		FSkillTreeLinkState LinkState;
 		InStateController->GetLinkState(TreeCategory, Link, LinkState);
-
+		
 		OnLinkStateUpdated(Link, LinkState);
 	}
 	

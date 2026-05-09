@@ -6,7 +6,7 @@
 #include "SkillTreeStateControllerBase.h"
 #include "SkillTreeStateControllerEditable.generated.h"
 
-class ISkillTreeSourceInterface;
+class ISkillTreeCanvasSourceInterface;
 
 USTRUCT()
 struct SKILLTREESYSTEM_API FSkillTreeCategoryState
@@ -29,9 +29,9 @@ class SKILLTREESYSTEM_API USkillTreeStateControllerEditable : public USkillTreeS
 	GENERATED_BODY()
 	
 public:
-
+	
 	UFUNCTION(BlueprintCallable, Category = "SkillTreeSystem")
-	void InitTreeWithSource(const FGameplayTag& TreeCategory, TScriptInterface<ISkillTreeSourceInterface> Source);
+	void InitTreeWithSource(const FGameplayTag& TreeCategory, TScriptInterface<ISkillTreeCanvasSourceInterface> Source);
 	
 	virtual void GetNodeState(const FGameplayTag& TreeCategory, const FGameplayTag& NodeId, FSkillTreeNodeState& OutState) const override;
 	
