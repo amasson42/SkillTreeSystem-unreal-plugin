@@ -17,6 +17,9 @@ public:
 	TSoftObjectPtr<UTexture2D> Icon;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FLinearColor Tint = FLinearColor::White;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FText Label;
 	
 	// Fill up generic node appearance parameters
