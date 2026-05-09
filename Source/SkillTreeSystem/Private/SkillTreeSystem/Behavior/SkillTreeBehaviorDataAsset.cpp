@@ -61,11 +61,9 @@ void USkillTreeBehaviorDataAsset::GatherInterestsForNode_Implementation(const FG
 	
 	for (const auto& LevelData : NodeBehavior->Levels)
 	{
-		LevelData.Requirements.GatherInterests(Interests);
+		FSkillTreeRequirementBase::InstGatherInterests(LevelData.Requirement, Interests);
 		if (!LevelData.bIgnoreGlobalRequirements)
-		{
-			GlobalRequirements.GatherInterests(Interests);
-		}
+			FSkillTreeRequirementBase::InstGatherInterests(GlobalRequirement, Interests);
 	}
 }
 
@@ -94,13 +92,11 @@ bool USkillTreeBehaviorDataAsset::_CanUpgradeNode(
 	
 	if (!LevelData.bIgnoreGlobalRequirements)
 	{
-		TArray<int32> ErroredReasons;
-		if (!GlobalRequirements.GetFulfilled(State, &ErroredReasons))
+		if (!FSkillTreeRequirementBase::InstIsFulfilled(GlobalRequirement, State))
 			return false;
 	}
 	
-	TArray<int32> ErroredReasons;
-	if (!LevelData.Requirements.GetFulfilled(State, &ErroredReasons))
+	if (!FSkillTreeRequirementBase::InstIsFulfilled(LevelData.Requirement, State))
 		return false;
 	
 	return true;

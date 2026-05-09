@@ -7,7 +7,7 @@
 #include "Engine/DataAsset.h"
 #include "SkillTreeSystem/Behavior/SkillTreeBehaviorInterface.h"
 #include "SkillTreeSystem/CanvasSource/SkillTreeCoreStructures.h"
-#include "SkillTreeSystem/Behavior/Requirements/SkillTreeRequirementsStructures.h"
+#include "SkillTreeSystem/Behavior/Requirements/SkillTreeRequirementBase.h"
 #include "SkillTreeBehaviorDataAsset.generated.h"
 
 USTRUCT(BlueprintType)
@@ -17,8 +17,8 @@ struct SKILLTREESYSTEM_API FSkillTreeBehaviorLevelData
 	
 public:
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Requirements")
-	FSkillTreeRequirements Requirements;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Requirements", meta = (BaseStruct = "/Script/SkillTreeSystem.SkillTreeRequirementBase", ExcludeBaseStruct))
+	FInstancedStruct Requirement;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Requirements")
 	bool bIgnoreGlobalRequirements = false;
@@ -57,8 +57,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Data")
 	TMap<FGameplayTag, FSkillTreeBehaviorDataAssetElement> Nodes;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Requirements")
-	FSkillTreeRequirements GlobalRequirements;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Requirements", meta = (BaseStruct = "/Script/SkillTreeSystem.SkillTreeRequirementBase", ExcludeBaseStruct))
+	FInstancedStruct GlobalRequirement;
 	
 private:
 	
