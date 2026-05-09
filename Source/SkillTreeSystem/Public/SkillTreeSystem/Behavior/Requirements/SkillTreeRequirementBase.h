@@ -17,9 +17,6 @@ public:
 	
 	virtual ~FSkillTreeRequirementBase() = default;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FText Description;
-	
 	virtual bool IsFulfilled(USkillTreeStateControllerBase* State) const;
 	virtual void GatherInterests(FSkillTreeBehaviorInterest& Interests) const;
 	
