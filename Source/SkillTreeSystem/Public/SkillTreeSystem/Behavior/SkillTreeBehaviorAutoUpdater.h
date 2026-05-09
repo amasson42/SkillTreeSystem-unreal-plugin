@@ -24,25 +24,23 @@ class SKILLTREESYSTEM_API USkillTreeBehaviorAutoUpdater : public UObject
 public:
 	
 	UFUNCTION(BlueprintCallable, Category = "SkillTree|Observing")
-	bool ObserveControllerWithBehavior(
+	bool ObserveControllerWithBehaviors(
 		USkillTreeStateControllerEditable* Controller,
-		TScriptInterface<ISkillTreeBehaviorInterface> Behavior,
-		const TArray<FGameplayTag>& NodeIds);
+		const TArray<TScriptInterface<ISkillTreeBehaviorInterface>>& Behaviors);
 	
 	UFUNCTION(BlueprintCallable, Category = "SkillTree|Observing")
 	void StopObservingController();
 	
 private:
 	
-	void GatherInterestsForNode(const FGameplayTag& NodeId);
-	void MarkDirtyNode(const FGameplayTag& NodeId);
+	void GatherInterestsForNode(UObject* Behavior, const FGameplayTag& NodeId);
+	void MarkDirtyNode(const TWeakObjectPtr<UObject>& Behavior, const FGameplayTag& NodeId);
 	void ScheduleUpdate();
 	void UpdateDirtyNodes();
 	
 	UFUNCTION()
 	void OnStateNodeUpdated(
 		USkillTreeStateControllerBase* Controller,
-		const FGameplayTag& TreeCategory,
 		const FGameplayTag& NodeId,
 		const FSkillTreeNodeState& NodeState);
 	
@@ -53,16 +51,15 @@ private:
 		const FGameplayTag& ResourceName);
 	
 	TWeakObjectPtr<USkillTreeStateControllerEditable> ObservedController;
-	TWeakObjectPtr<UObject> ObservedBehavior;
 	
 	TMap<
-		TPair<FGameplayTag /* TreeCategory */, FGameplayTag /* SkillName */>,
-		TSet<FGameplayTag>> SkillInterestedNodes;
+		FGameplayTag /* SkillName */,
+		TSet<TPair<TWeakObjectPtr<UObject> /* Observed Behavior */, FGameplayTag /* Interested skills */>>> SkillInterestedNodes;
 	TMap<
 		TPair<ESkillTreeResourceType, FGameplayTag /* ResourceName */>,
-		TSet<FGameplayTag>> ResourceInterestedNodes;
+		TSet<TPair<TWeakObjectPtr<UObject> /* Observed Behavior */, FGameplayTag /* Interested skills */>>> ResourceInterestedNodes;
 	
-	TSet<FGameplayTag> DirtyNodes;
+	TSet<TPair<TWeakObjectPtr<UObject> /* Observed Behavior */, FGameplayTag>> DirtyNodes;
 	
 	bool bUpdatedScheduled = false;
 	

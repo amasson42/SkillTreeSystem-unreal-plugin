@@ -7,27 +7,30 @@
 #include "SkillTreeSystem/Behavior/SkillTreeBehaviorInterface.h"
 
 
-bool USkillTreeBehaviorAutoUpdater::ObserveControllerWithBehavior(
+bool USkillTreeBehaviorAutoUpdater::ObserveControllerWithBehaviors(
 	USkillTreeStateControllerEditable* Controller,
-	TScriptInterface<ISkillTreeBehaviorInterface> Behavior,
-	const TArray<FGameplayTag>& NodeIds)
+	const TArray<TScriptInterface<ISkillTreeBehaviorInterface>>& Behaviors)
 {
-	if (!(Behavior && IsValid(Behavior.GetObject()))) return false;
-	
 	if (!IsValid(Controller)) return false;
 	
 	StopObservingController();
 	
 	ObservedController = Controller;
-	ObservedBehavior = Behavior.GetObject();
 	
-	Controller->OnSkillTreeNodeUpdated.AddDynamic(this, &ThisClass::OnStateNodeUpdated);
-	Controller->OnSkillTreeResourceUpdated.AddDynamic(this, &ThisClass::OnStateResourceUpdated);
-	
-	for (const auto& NodeId : NodeIds)
+	for (const auto& Behavior : Behaviors)
 	{
-		GatherInterestsForNode(NodeId);
-		MarkDirtyNode(NodeId);
+		if (!(Behavior && IsValid(Behavior.GetObject()))) continue;
+		
+		Controller->OnSkillTreeNodeUpdated.AddDynamic(this, &ThisClass::OnStateNodeUpdated);
+		Controller->OnSkillTreeResourceUpdated.AddDynamic(this, &ThisClass::OnStateResourceUpdated);
+		
+		TArray<FGameplayTag> NodeIds;
+		ISkillTreeBehaviorInterface::Execute_GetNodesIds(Behavior.GetObject(), NodeIds);
+		for (const auto& NodeId : NodeIds)
+		{
+			GatherInterestsForNode(Behavior.GetObject(), NodeId);
+			MarkDirtyNode(Behavior.GetObject(), NodeId);
+		}
 	}
 	
 	return true;
@@ -42,32 +45,32 @@ void USkillTreeBehaviorAutoUpdater::StopObservingController()
 	Controller->OnSkillTreeResourceUpdated.RemoveDynamic(this, &ThisClass::OnStateResourceUpdated);
 }
 
-void USkillTreeBehaviorAutoUpdater::GatherInterestsForNode(const FGameplayTag& NodeId)
+void USkillTreeBehaviorAutoUpdater::GatherInterestsForNode(UObject* Behavior, const FGameplayTag& NodeId)
 {
-	if (!ObservedBehavior.IsValid()) return;
-	
-	auto* Behavior = ObservedBehavior.Get();
+	check(IsValid(Behavior) && Behavior->Implements<USkillTreeBehaviorInterface>());
 	
 	FSkillTreeBehaviorInterest Interests;
 	ISkillTreeBehaviorInterface::Execute_GatherInterestsForNode(Behavior, NodeId, Interests);
 	
+	SkillInterestedNodes.FindOrAdd(NodeId).Add({Behavior, NodeId});
+	
 	for (const auto& SkillInterest : Interests.SkillInterest)
 	{
 		SkillInterestedNodes
-			.FindOrAdd({SkillInterest.TreeName, SkillInterest.SkillName})
-			.Add(NodeId);
+			.FindOrAdd(SkillInterest.SkillName)
+			.Add({Behavior, NodeId});
 	}
 	for (const auto& ResourceInterest : Interests.ResourceInterests)
 	{
 		ResourceInterestedNodes
 			.FindOrAdd({ResourceInterest.ResourceType, ResourceInterest.ResourceName})
-			.Add(NodeId);
+			.Add({Behavior, NodeId});
 	}
 }
 
-void USkillTreeBehaviorAutoUpdater::MarkDirtyNode(const FGameplayTag& NodeId)
+void USkillTreeBehaviorAutoUpdater::MarkDirtyNode(const TWeakObjectPtr<UObject>& Behavior, const FGameplayTag& NodeId)
 {
-	DirtyNodes.Add(NodeId);
+	DirtyNodes.Add({Behavior, NodeId});
 	ScheduleUpdate();
 }
 
@@ -93,32 +96,30 @@ void USkillTreeBehaviorAutoUpdater::UpdateDirtyNodes()
 {
 	if (DirtyNodes.IsEmpty()) return;
 	
-	if (!ObservedBehavior.IsValid()) return;
-	auto* Behavior = ObservedBehavior.Get();
-	
 	if (!ObservedController.IsValid()) return;
 	auto* Controller = ObservedController.Get();
 	
-	TSet<FGameplayTag> CachedDirtyNodes = DirtyNodes;
-	for (const auto& DirtyNode : CachedDirtyNodes)
+	auto CachedDirtyNodes = DirtyNodes;
+	for (const auto& [BehaviorPtr, DirtyNode] : CachedDirtyNodes)
 	{
-		ISkillTreeBehaviorInterface::Execute_UpdateNodeState(Behavior, DirtyNode, Controller);
+		if (BehaviorPtr->IsValidLowLevel())
+		{
+			ISkillTreeBehaviorInterface::Execute_UpdateNodeState(BehaviorPtr.Get(), DirtyNode, Controller);
+		}
 	}
 	DirtyNodes.Reset();
 }
 
 void USkillTreeBehaviorAutoUpdater::OnStateNodeUpdated(
 	USkillTreeStateControllerBase* Controller,
-	const FGameplayTag& TreeCategory,
 	const FGameplayTag& NodeId,
 	const FSkillTreeNodeState& NodeState)
 {
-	MarkDirtyNode(NodeId);
-	if (const TSet<FGameplayTag>* InterestedNodes = SkillInterestedNodes.Find({TreeCategory, NodeId}))
+	if (const auto* InterestedNodes = SkillInterestedNodes.Find(NodeId))
 	{
-		for (const FGameplayTag& InterestedNode : *InterestedNodes)
+		for (const auto& [Behavior, InterestedNode] : *InterestedNodes)
 		{
-			MarkDirtyNode(InterestedNode);
+			MarkDirtyNode(Behavior, InterestedNode);
 		}
 	}
 }
@@ -128,11 +129,11 @@ void USkillTreeBehaviorAutoUpdater::OnStateResourceUpdated(
 	ESkillTreeResourceType ResourceType,
 	const FGameplayTag& ResourceName)
 {
-	if (const TSet<FGameplayTag>* InterestedNodes = ResourceInterestedNodes.Find({ResourceType, ResourceName}))
+	if (const auto* InterestedNodes = ResourceInterestedNodes.Find({ResourceType, ResourceName}))
 	{
-		for (const FGameplayTag& InterestedNode : *InterestedNodes)
+		for (const auto& [Behavior, InterestedNode] : *InterestedNodes)
 		{
-			MarkDirtyNode(InterestedNode);
+			MarkDirtyNode(Behavior, InterestedNode);
 		}
 	}
 }
