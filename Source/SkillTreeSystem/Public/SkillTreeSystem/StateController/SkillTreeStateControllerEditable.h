@@ -6,19 +6,8 @@
 #include "SkillTreeStateControllerBase.h"
 #include "SkillTreeStateControllerEditable.generated.h"
 
+
 class ISkillTreeCanvasSourceInterface;
-
-USTRUCT()
-struct SKILLTREESYSTEM_API FSkillTreeCategoryState
-{
-	GENERATED_BODY()
-
-public:
-
-	TMap<FGameplayTag, FSkillTreeNodeState> NodeStates;
-	TMap<FSkillTreeLinkName, FSkillTreeLinkState> LinkStates;
-	
-};
 
 /**
  * 
@@ -31,19 +20,19 @@ class SKILLTREESYSTEM_API USkillTreeStateControllerEditable : public USkillTreeS
 public:
 	
 	UFUNCTION(BlueprintCallable, Category = "SkillTreeSystem")
-	void InitTreeWithSource(const FGameplayTag& TreeCategory, TScriptInterface<ISkillTreeCanvasSourceInterface> Source);
+	void InitTreeWithSource(TScriptInterface<ISkillTreeCanvasSourceInterface> Source);
 	
-	virtual void GetNodeState(const FGameplayTag& TreeCategory, const FGameplayTag& NodeId, FSkillTreeNodeState& OutState) const override;
+	virtual void GetNodeState(const FGameplayTag& NodeId, FSkillTreeNodeState& OutState) const override;
 	
-	virtual void GetLinkState(const FGameplayTag& TreeCategory, const FSkillTreeLinkName& LinkName, FSkillTreeLinkState& OutState) const override;
+	virtual void GetLinkState(const FSkillTreeLinkName& LinkName, FSkillTreeLinkState& OutState) const override;
 	
 	virtual const FSkillTreeResourceContainer& GetResourceContainer() const override;
 	
 	UFUNCTION(BlueprintCallable, Category = "SkillTreeState")
-	void SetNodeState(const FGameplayTag& TreeCategory, const FGameplayTag& NodeId, const FSkillTreeNodeState& InState);
+	void SetNodeState(const FGameplayTag& NodeId, const FSkillTreeNodeState& InState);
 	
 	UFUNCTION(BlueprintCallable, Category = "SkillTreeState")
-	void SetNodeLevel(const FGameplayTag& TreeCategory, const FGameplayTag& NodeId, int32 NewLevel);
+	void SetNodeLevel(const FGameplayTag& NodeId, int32 NewLevel);
 	
 	UFUNCTION(BlueprintCallable, Category = "SkillTreeState|Resources")
 	void SetBoolResource(FGameplayTag ResourceName, bool Value);
@@ -59,7 +48,8 @@ public:
 	
 protected:
 	
-	TMap<FGameplayTag, FSkillTreeCategoryState> TreeStates;
+	TMap<FGameplayTag, FSkillTreeNodeState> NodeStates;
+	TMap<FSkillTreeLinkName, FSkillTreeLinkState> LinkStates;
 	
 	FSkillTreeResourceContainer ResourceContainer;
 	

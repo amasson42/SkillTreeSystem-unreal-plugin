@@ -21,7 +21,7 @@ class SKILLTREESYSTEM_API USkillTreeWidget : public UUserWidget
 public:
 	
 	UFUNCTION(BlueprintCallable, Category = "SkillTree|Source")
-	virtual void SetSource(TScriptInterface<ISkillTreeCanvasSourceInterface> InSource, const FGameplayTag& InTreeCategory);
+	virtual void SetSource(TScriptInterface<ISkillTreeCanvasSourceInterface> InSource);
 	
 	UFUNCTION(BlueprintCallable, Category = "SkillTree|State")
 	virtual void SetStateController(USkillTreeStateControllerBase* InStateController);
@@ -39,7 +39,7 @@ protected:
 	void ClearStateController();
 	
 	UFUNCTION(BlueprintImplementableEvent, Category = "SkillTree")
-	void OnSourceUpdated(bool bValidSource, const TScriptInterface<ISkillTreeCanvasSourceInterface>& NewSource, const FGameplayTag& NewTreeCategory);
+	void OnSourceUpdated(bool bValidSource, const TScriptInterface<ISkillTreeCanvasSourceInterface>& NewSource);
 	
 	UFUNCTION(BlueprintImplementableEvent, Category = "SkillTree")
 	void OnNodeStateUpdated(const FGameplayTag& NodeId, const FSkillTreeNodeState& NewNodeState);
@@ -52,9 +52,6 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "SkillTree|Source", meta = (ExposeOnSpawn = true))
 	TScriptInterface<ISkillTreeCanvasSourceInterface> Source;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "SkillTree|Source", meta = (ExposeOnSpawn = true))
-	FGameplayTag TreeCategory;
-	
 	UPROPERTY(BlueprintReadOnly, Category = "SkillTree|State")
 	TWeakObjectPtr<USkillTreeStateControllerBase> StateController;
 	
@@ -63,14 +60,12 @@ private:
 	UFUNCTION()
 	void OnSkillTreeNodeUpdated(
 		USkillTreeStateControllerBase* Controller,
-		const FGameplayTag& InTreeCategory,
 		const FGameplayTag& NodeId,
 		const FSkillTreeNodeState& State);
 	
 	UFUNCTION()
 	void OnSkillTreeLinkUpdated(
 		USkillTreeStateControllerBase* Controller,
-		const FGameplayTag& InTreeCategory,
 		const FSkillTreeLinkName& LinkName,
 		const FSkillTreeLinkState& State);
 	

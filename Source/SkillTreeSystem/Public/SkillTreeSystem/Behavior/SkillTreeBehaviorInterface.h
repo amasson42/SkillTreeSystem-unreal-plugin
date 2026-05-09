@@ -27,6 +27,9 @@ class SKILLTREESYSTEM_API ISkillTreeBehaviorInterface
 public:
 	
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "SkillTreeBehavior")
+	void GetNodesIds(TArray<FGameplayTag>& OutNodes) const;
+	
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "SkillTreeBehavior")
 	bool CanUpgradeNode(const FGameplayTag& NodeId, USkillTreeStateControllerBase* State) const;
 	
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "SkillTreeBehavior")

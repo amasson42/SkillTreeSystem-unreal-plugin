@@ -42,7 +42,7 @@ public:
 	void GetLinkAppearance_Implementation(const FSkillTreeLinkName& LinkName, FSkillTreeLinkAppearance& OutAppearance) override;
 	void GetLinksPositions_Implementation(TMap<FSkillTreeLinkName, FSkillTreeLinkPosition>& OutLinksPositions) override;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Content")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
 	TMap<FGameplayTag, FSkillTreeSourceDataAssetElement> Nodes;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Widget|Node")

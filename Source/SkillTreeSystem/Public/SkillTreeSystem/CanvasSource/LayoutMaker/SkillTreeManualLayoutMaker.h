@@ -35,7 +35,7 @@ public:
 	
 	virtual void GetElementsPosition_Implementation(TMap<FGameplayTag, FSkillTreeNodePosition>& NodePositions, TMap<FSkillTreeLinkName, FSkillTreeLinkPosition>& LinkPositions) override;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Nodes")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Data")
 	TMap<FGameplayTag, FSkillTreeManualLayoutElement> Nodes;
 	
 };

@@ -9,12 +9,12 @@ const FSkillTreeResourceContainer& USkillTreeStateControllerBase::GetResourceCon
 	return None;
 }
 
-void USkillTreeStateControllerBase::RequestIncreaseSkill(const FGameplayTag& TreeCategory, const FGameplayTag& NodeId)
+void USkillTreeStateControllerBase::RequestIncreaseSkill(const FGameplayTag& NodeId)
 {
-	OnRequestIncreaseSkill.Broadcast(this, TreeCategory, NodeId);
+	OnRequestIncreaseSkill.Broadcast(this, NodeId);
 }
 
-void USkillTreeStateControllerBase::RequestDecreaseSkill(const FGameplayTag& TreeCategory, const FGameplayTag& NodeId)
+void USkillTreeStateControllerBase::RequestDecreaseSkill(const FGameplayTag& NodeId)
 {
-	OnRequestDecreaseSkill.Broadcast(this, TreeCategory, NodeId);
+	OnRequestDecreaseSkill.Broadcast(this, NodeId);
 }

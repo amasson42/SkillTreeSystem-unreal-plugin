@@ -18,9 +18,6 @@ struct SKILLTREESYSTEM_API FSkillTreeRequirement_SkillLevel : public FSkillTreeR
 public:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FGameplayTag TreeCategory;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FGameplayTag NodeId;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)

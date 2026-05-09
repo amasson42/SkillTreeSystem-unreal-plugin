@@ -5,7 +5,7 @@
 
 #include "SkillTreeSystem/CanvasSource/SkillTreeCanvasSourceInterface.h"
 
-void USkillTreeStateControllerEditable::InitTreeWithSource(const FGameplayTag& TreeCategory, TScriptInterface<ISkillTreeCanvasSourceInterface> Source)
+void USkillTreeStateControllerEditable::InitTreeWithSource(TScriptInterface<ISkillTreeCanvasSourceInterface> Source)
 {
 	if (!(Source && IsValid(Source.GetObject()))) return;
 	
@@ -14,32 +14,25 @@ void USkillTreeStateControllerEditable::InitTreeWithSource(const FGameplayTag& T
 	TArray<FSkillTreeLinkName> Links;
 	ISkillTreeCanvasSourceInterface::Execute_GetLinks(Source.GetObject(), Links);
 	
-	auto& TreeState = TreeStates.FindOrAdd(TreeCategory);
 	for (const FGameplayTag& NodeId : Nodes)
-		TreeState.NodeStates.Add(NodeId);
+		NodeStates.Add(NodeId);
 	for (const FSkillTreeLinkName& Link : Links)
-		TreeState.LinkStates.Add(Link);
+		LinkStates.Add(Link);
 }
 
-void USkillTreeStateControllerEditable::GetNodeState(const FGameplayTag& TreeCategory, const FGameplayTag& NodeId, FSkillTreeNodeState& OutState) const
+void USkillTreeStateControllerEditable::GetNodeState(const FGameplayTag& NodeId, FSkillTreeNodeState& OutState) const
 {
-	if (const auto* TreeState = TreeStates.Find(TreeCategory))
+	if (auto* NodeState = NodeStates.Find(NodeId))
 	{
-		if (auto* NodeState = TreeState->NodeStates.Find(NodeId))
-		{
-			OutState = *NodeState;
-		}
+		OutState = *NodeState;
 	}
 }
 
-void USkillTreeStateControllerEditable::GetLinkState(const FGameplayTag& TreeCategory, const FSkillTreeLinkName& LinkName, FSkillTreeLinkState& OutState) const
+void USkillTreeStateControllerEditable::GetLinkState(const FSkillTreeLinkName& LinkName, FSkillTreeLinkState& OutState) const
 {
-	if (const auto* TreeState = TreeStates.Find(TreeCategory))
+	if (auto* LinkState = LinkStates.Find(LinkName))
 	{
-		if (auto* LinkState = TreeState->LinkStates.Find(LinkName))
-		{
-			OutState = *LinkState;
-		}
+		OutState = *LinkState;
 	}
 }
 
@@ -48,41 +41,38 @@ const FSkillTreeResourceContainer& USkillTreeStateControllerEditable::GetResourc
 	return ResourceContainer;
 }
 
-void USkillTreeStateControllerEditable::SetNodeState(const FGameplayTag& TreeCategory, const FGameplayTag& NodeId, const FSkillTreeNodeState& InState)
+void USkillTreeStateControllerEditable::SetNodeState(const FGameplayTag& NodeId, const FSkillTreeNodeState& InState)
 {
-	auto* TreeState = TreeStates.Find(TreeCategory);
-	if (!TreeState) return;
-	
-	auto* NodeState = TreeState->NodeStates.Find(NodeId);
+	auto* NodeState = NodeStates.Find(NodeId);
 	if (!NodeState) return;
 	
 	if (*NodeState == InState) return;
 	
 	*NodeState = InState;
-	OnSkillTreeNodeUpdated.Broadcast(this, TreeCategory, NodeId, InState);
+	OnSkillTreeNodeUpdated.Broadcast(this, NodeId, InState);
 	
-	for (auto& [LinkName, LinkState] : TreeState->LinkStates)
+	for (auto& [LinkName, LinkState] : LinkStates)
 	{
 		if (LinkName.StartNodeName == NodeId || LinkName.EndNodeName == NodeId)
 		{
-			const FSkillTreeNodeState* StartState = TreeState->NodeStates.Find(LinkName.StartNodeName);
-			const FSkillTreeNodeState* EndState = TreeState->NodeStates.Find(LinkName.EndNodeName);
+			const FSkillTreeNodeState* StartState = NodeStates.Find(LinkName.StartNodeName);
+			const FSkillTreeNodeState* EndState = NodeStates.Find(LinkName.EndNodeName);
 			
 			if (StartState && EndState)
 			{
 				if (LinkState.SetFromNodeStates(*StartState, *EndState))
-					OnSkillTreeLinkUpdated.Broadcast(this, TreeCategory, LinkName, LinkState);
+					OnSkillTreeLinkUpdated.Broadcast(this, LinkName, LinkState);
 			}
 		}
 	}
 }
 
-void USkillTreeStateControllerEditable::SetNodeLevel(const FGameplayTag& TreeCategory, const FGameplayTag& NodeId, int32 NewLevel)
+void USkillTreeStateControllerEditable::SetNodeLevel(const FGameplayTag& NodeId, int32 NewLevel)
 {
 	FSkillTreeNodeState State;
-	GetNodeState(TreeCategory, NodeId, State);
+	GetNodeState(NodeId, State);
 	State.Level = NewLevel;
-	SetNodeState(TreeCategory, NodeId, State);
+	SetNodeState(NodeId, State);
 }
 
 void USkillTreeStateControllerEditable::SetBoolResource(FGameplayTag ResourceName, bool Value)

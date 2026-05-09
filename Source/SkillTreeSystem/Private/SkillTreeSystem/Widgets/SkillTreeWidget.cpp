@@ -7,10 +7,9 @@
 #include "SkillTreeSystem/CanvasSource/SkillTreeCanvasSourceInterface.h"
 
 
-void USkillTreeWidget::SetSource(TScriptInterface<ISkillTreeCanvasSourceInterface> InSource, const FGameplayTag& InTreeCategory)
+void USkillTreeWidget::SetSource(TScriptInterface<ISkillTreeCanvasSourceInterface> InSource)
 {
 	Source = InSource;
-	TreeCategory = InTreeCategory;
 	
 	OnSourceUpdatedCheck();
 }
@@ -36,7 +35,7 @@ void USkillTreeWidget::SetStateController(USkillTreeStateControllerBase* InState
 	for (const FGameplayTag& NodeId : Nodes)
 	{
 		FSkillTreeNodeState NodeState;
-		InStateController->GetNodeState(TreeCategory, NodeId, NodeState);
+		InStateController->GetNodeState(NodeId, NodeState);
 		
 		OnNodeStateUpdated(NodeId, NodeState);
 	}
@@ -46,7 +45,7 @@ void USkillTreeWidget::SetStateController(USkillTreeStateControllerBase* InState
 	for (const FSkillTreeLinkName& Link : Links)
 	{
 		FSkillTreeLinkState LinkState;
-		InStateController->GetLinkState(TreeCategory, Link, LinkState);
+		InStateController->GetLinkState(Link, LinkState);
 		
 		OnLinkStateUpdated(Link, LinkState);
 	}
@@ -90,33 +89,25 @@ void USkillTreeWidget::ClearStateController()
 
 void USkillTreeWidget::OnSkillTreeNodeUpdated(
 	USkillTreeStateControllerBase* Controller,
-	const FGameplayTag& InTreeCategory,
 	const FGameplayTag& NodeId,
 	const FSkillTreeNodeState& State)
 {
 	check(Controller == StateController);
-	if (InTreeCategory == TreeCategory)
-	{
-		OnNodeStateUpdated(NodeId, State);
-	}
+	OnNodeStateUpdated(NodeId, State);
 }
 
 void USkillTreeWidget::OnSkillTreeLinkUpdated(
 	USkillTreeStateControllerBase* Controller,
-	const FGameplayTag& InTreeCategory,
 	const FSkillTreeLinkName& LinkName,
 	const FSkillTreeLinkState& State)
 {
 	check(Controller == StateController);
-	if (InTreeCategory == TreeCategory)
-	{
-		OnLinkStateUpdated(LinkName, State);
-	}
+	OnLinkStateUpdated(LinkName, State);
 }
 
 void USkillTreeWidget::OnSourceUpdatedCheck()
 {
 	bool bValidSource = Source && IsValid(Source.GetObject());
 	
-	OnSourceUpdated(bValidSource, Source, TreeCategory);
+	OnSourceUpdated(bValidSource, Source);
 }

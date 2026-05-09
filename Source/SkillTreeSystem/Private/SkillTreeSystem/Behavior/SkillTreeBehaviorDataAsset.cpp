@@ -6,6 +6,11 @@
 #include "SkillTreeSystem/StateController/SkillTreeStateControllerBase.h"
 #include "SkillTreeSystem/StateController/SkillTreeStateControllerEditable.h"
 
+void USkillTreeBehaviorDataAsset::GetNodesIds_Implementation(TArray<FGameplayTag>& OutNodes) const
+{
+	Nodes.GetKeys(OutNodes);
+}
+
 bool USkillTreeBehaviorDataAsset::CanUpgradeNode_Implementation(const FGameplayTag& NodeId, USkillTreeStateControllerBase* State) const
 {
 	return _CanUpgradeNode(NodeId, State);
@@ -17,7 +22,7 @@ void USkillTreeBehaviorDataAsset::UpdateNodeState_Implementation(const FGameplay
 	if (!NodeBehavior) return;
 	
 	FSkillTreeNodeState NewNodeState;
-	State->GetNodeState(TreeCategory, NodeId, NewNodeState);
+	State->GetNodeState(NodeId, NewNodeState);
 	
 	bool bModified = false;
 	
@@ -51,7 +56,7 @@ void USkillTreeBehaviorDataAsset::UpdateNodeState_Implementation(const FGameplay
 	}
 	
 	if (bModified)
-		State->SetNodeState(TreeCategory, NodeId, NewNodeState);
+		State->SetNodeState(NodeId, NewNodeState);
 }
 
 void USkillTreeBehaviorDataAsset::GatherInterestsForNode_Implementation(const FGameplayTag& NodeId, FSkillTreeBehaviorInterest& Interests)
@@ -77,7 +82,7 @@ bool USkillTreeBehaviorDataAsset::_CanUpgradeNode(
 	if (CachedState)
 		NodeState = *CachedState;
 	else
-		State->GetNodeState(TreeCategory, NodeId, NodeState);
+		State->GetNodeState(NodeId, NodeState);
 	
 	const auto* NodeBehavior = CachedBehavior ? CachedBehavior : Nodes.Find(NodeId);
 	if (!NodeBehavior) return false;

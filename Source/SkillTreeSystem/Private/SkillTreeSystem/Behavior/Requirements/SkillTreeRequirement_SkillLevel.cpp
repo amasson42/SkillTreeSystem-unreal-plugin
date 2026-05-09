@@ -11,13 +11,12 @@ bool FSkillTreeRequirement_SkillLevel::IsFulfilled(USkillTreeStateControllerBase
 	if (!IsValid(State)) return false;
 	
 	FSkillTreeNodeState NodeState;
-	State->GetNodeState(TreeCategory, NodeId, NodeState);
+	State->GetNodeState(NodeId, NodeState);
 	return NodeState.Level >= MinLevel;
 }
 
 void FSkillTreeRequirement_SkillLevel::GatherInterests(FSkillTreeBehaviorInterest& Interests) const
 {
 	auto& SkillInterest = Interests.SkillInterest.AddDefaulted_GetRef();
-	SkillInterest.TreeName = TreeCategory;
 	SkillInterest.SkillName = NodeId;
 }

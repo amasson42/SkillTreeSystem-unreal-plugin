@@ -15,9 +15,6 @@ struct SKILLTREESYSTEM_API FSkillTreeBehaviorSkillInterest
 public:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FGameplayTag TreeName;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FGameplayTag SkillName;
 	
 };
