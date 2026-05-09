@@ -10,7 +10,7 @@
 
 class USkillTreeStateControllerBase;
 
-USTRUCT(BlueprintType)
+USTRUCT(BlueprintType, DisplayName = "SKTS Resource")
 struct SKILLTREESYSTEM_API FSkillTreeRequirement_Resource : public FSkillTreeRequirementBase
 {
 	GENERATED_BODY()

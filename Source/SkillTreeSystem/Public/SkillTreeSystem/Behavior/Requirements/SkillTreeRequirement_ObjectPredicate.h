@@ -9,7 +9,7 @@
 
 class USkillTreeStateControllerBase;
 
-USTRUCT(BlueprintType)
+USTRUCT(BlueprintType, DisplayName = "SKTS ObjectPredicate")
 struct SKILLTREESYSTEM_API FSkillTreeRequirement_ObjectPredicate : public FSkillTreeRequirementBase
 {
 	GENERATED_BODY()

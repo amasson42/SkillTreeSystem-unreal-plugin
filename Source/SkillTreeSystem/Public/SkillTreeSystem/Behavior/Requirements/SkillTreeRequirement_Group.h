@@ -18,7 +18,7 @@ enum class ESkillTreeRequirementGroupType : uint8
 	AnyOf = 1		UMETA(DisplayName = "AnyOf"),
 };
 
-USTRUCT(BlueprintType)
+USTRUCT(BlueprintType, DisplayName = "SKTS Group")
 struct SKILLTREESYSTEM_API FSkillTreeRequirement_Group : public FSkillTreeRequirementBase
 {
 	GENERATED_BODY()

@@ -3,28 +3,21 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameplayTagContainer.h"
 #include "SkillTreeSystem/Behavior/Requirements/SkillTreeRequirementBase.h"
 #include "SkillTreeSystem/Behavior/Requirements/SkillTreeBehaviorInterestStructures.h"
-#include "SkillTreeRequirement_SkillLevel.generated.h"
+#include "SkillTreeRequirement_Not.generated.h"
 
 class USkillTreeStateControllerBase;
 
-USTRUCT(BlueprintType, DisplayName = "SKTS Skill Level")
-struct SKILLTREESYSTEM_API FSkillTreeRequirement_SkillLevel : public FSkillTreeRequirementBase
+USTRUCT(BlueprintType, DisplayName = "SKTS Not")
+struct SKILLTREESYSTEM_API FSkillTreeRequirement_Not : public FSkillTreeRequirementBase
 {
 	GENERATED_BODY()
 	
 public:
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FGameplayTag TreeCategory;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FGameplayTag NodeId;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int32 MinLevel = 1;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BaseStruct = "/Script/SkillTreeSystem.SkillTreeRequirementBase", ExcludeBaseStruct))
+	FInstancedStruct PreventedBy;
 	
 	virtual bool IsFulfilled(USkillTreeStateControllerBase* State) const override;
 	virtual void GatherInterests(FSkillTreeBehaviorInterest& Interests) const override;
