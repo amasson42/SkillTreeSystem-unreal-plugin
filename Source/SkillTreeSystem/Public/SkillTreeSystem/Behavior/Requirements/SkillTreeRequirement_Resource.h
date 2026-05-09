@@ -11,7 +11,7 @@
 class USkillTreeStateControllerBase;
 
 USTRUCT(BlueprintType)
-struct SKILLTREESYSTEM_API FSkillTreeRequirement_BoolResource : public FSkillTreeRequirementBase
+struct SKILLTREESYSTEM_API FSkillTreeRequirement_Resource : public FSkillTreeRequirementBase
 {
 	GENERATED_BODY()
 	
@@ -20,43 +20,16 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FGameplayTag ResourceName;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resource")
+	ESkillTreeResourceType ResourceType;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resource", meta = (EditCondition = "ResourceType == ESkillTreeResourceType::Boolean", EditConditionHides))
 	bool ExpectTrue = true;
 	
-	virtual bool IsFulfilled(USkillTreeStateControllerBase* State) const override;
-	virtual void GatherInterests(FSkillTreeBehaviorInterest& Interests) const override;
-	
-};
-
-USTRUCT(BlueprintType)
-struct SKILLTREESYSTEM_API FSkillTreeRequirement_ScalarResource : public FSkillTreeRequirementBase
-{
-	GENERATED_BODY()
-	
-public:
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FGameplayTag ResourceName;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resource", meta = (EditCondition = "ResourceType == ESkillTreeResourceType::Scalar", EditConditionHides))
 	float MinQuantity = 1.0f;
 	
-	virtual bool IsFulfilled(USkillTreeStateControllerBase* State) const override;
-	virtual void GatherInterests(FSkillTreeBehaviorInterest& Interests) const override;
-	
-};
-
-USTRUCT(BlueprintType)
-struct SKILLTREESYSTEM_API FSkillTreeRequirement_IntegerResource : public FSkillTreeRequirementBase
-{
-	GENERATED_BODY()
-	
-public:
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FGameplayTag ResourceName;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resource", meta = (EditCondition = "ResourceType == ESkillTreeResourceType::Integer", EditConditionHides))
 	int32 MinValue = 1;
 	
 	virtual bool IsFulfilled(USkillTreeStateControllerBase* State) const override;
