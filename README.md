@@ -7,3 +7,9 @@ Used nowhere
 
 # TODO
 
+- States
+  - Invisible. Node does not appear
+  - Broken. Node is no longer available
+ 
+
+
