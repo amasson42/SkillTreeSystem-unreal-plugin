@@ -17,12 +17,12 @@ bool USkillTreeBehaviorAutoUpdater::ObserveControllerWithBehaviors(
 	
 	ObservedController = Controller;
 	
+	Controller->OnSkillTreeNodeUpdated.AddDynamic(this, &ThisClass::OnStateNodeUpdated);
+	Controller->OnSkillTreeResourceUpdated.AddDynamic(this, &ThisClass::OnStateResourceUpdated);
+	
 	for (const auto& Behavior : Behaviors)
 	{
 		if (!(Behavior && IsValid(Behavior.GetObject()))) continue;
-		
-		Controller->OnSkillTreeNodeUpdated.AddDynamic(this, &ThisClass::OnStateNodeUpdated);
-		Controller->OnSkillTreeResourceUpdated.AddDynamic(this, &ThisClass::OnStateResourceUpdated);
 		
 		TArray<FGameplayTag> NodeIds;
 		ISkillTreeBehaviorInterface::Execute_GetNodesIds(Behavior.GetObject(), NodeIds);
