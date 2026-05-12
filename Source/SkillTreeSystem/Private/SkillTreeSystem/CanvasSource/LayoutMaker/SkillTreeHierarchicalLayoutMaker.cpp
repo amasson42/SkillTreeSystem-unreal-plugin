@@ -216,7 +216,7 @@ static void _PopulateOutput(
 // Entry point
 // ---------------------------------------------------------------------------
 
-void USkillTreeHierarchicalLayoutMaker::GetElementsPosition_Implementation(
+void USkillTreeHierarchicalLayoutMaker::GetCanvasElementsPositions_Implementation(
 	TMap<FGameplayTag, FSkillTreeNodePosition>& OutNodePositions,
 	TMap<FSkillTreeLinkName, FSkillTreeLinkPosition>& OutLinkPositions)
 {

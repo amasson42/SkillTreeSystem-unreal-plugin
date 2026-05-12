@@ -32,15 +32,13 @@ class SKILLTREESYSTEM_API USkillTreeCanvasSourceDataAsset : public UDataAsset, p
 	
 public:
 	
-	void GetNodesIds_Implementation(TArray<FGameplayTag>& OutNodes) override;
-	void GetNodeClass_Implementation(const FGameplayTag& NodeId, TSubclassOf<USkillTreeNodeWidget>& OutWidgetClass) override;
-	void GetNodeAppearance_Implementation(const FGameplayTag& NodeId, FSkillTreeNodeAppearance& OutAppearance) override;
-	void GetNodesPosition_Implementation(TMap<FGameplayTag, FSkillTreeNodePosition>& NodePositions) override;
-	
-	void GetLinks_Implementation(TArray<FSkillTreeLinkName>& OutLinks) override;
-	void GetLinkClass_Implementation(const FSkillTreeLinkName& LinkName, TSubclassOf<USkillTreeLinkWidget>& OutWidgetClass) override;
-	void GetLinkAppearance_Implementation(const FSkillTreeLinkName& LinkName, FSkillTreeLinkAppearance& OutAppearance) override;
-	void GetLinksPositions_Implementation(TMap<FSkillTreeLinkName, FSkillTreeLinkPosition>& OutLinksPositions) override;
+	virtual void GetCanvasNodesIds_Implementation(TArray<FGameplayTag>& OutNodes) override;
+	virtual void GetCanvasNodeData_Implementation(const FGameplayTag& NodeId, TSubclassOf<USkillTreeNodeWidget>& OutWidgetClass, FSkillTreeNodeAppearance& OutAppearance) override;
+	virtual void GetCanvasLinkIds_Implementation(TArray<FSkillTreeLinkName>& OutLinks) override;
+	virtual void GetCanvasLinkData_Implementation(const FSkillTreeLinkName& LinkName, TSubclassOf<USkillTreeLinkWidget>& OutWidgetClass, FSkillTreeLinkAppearance& OutAppearance) override;
+	virtual void GetCanvasElementsPositions_Implementation(
+		TMap<FGameplayTag, FSkillTreeNodePosition>& OutNodePositions,
+		TMap<FSkillTreeLinkName, FSkillTreeLinkPosition>& OutLinkPositions) override;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
 	TMap<FGameplayTag, FSkillTreeSourceDataAssetElement> Nodes;

@@ -32,7 +32,9 @@ class SKILLTREESYSTEM_API USkillTreeCircularLayoutMaker : public UDataAsset, pub
 	
 public:
 	
-	virtual void GetElementsPosition_Implementation(TMap<FGameplayTag, FSkillTreeNodePosition>& NodePositions, TMap<FSkillTreeLinkName, FSkillTreeLinkPosition>& LinkPositions) override;
+	virtual void GetCanvasElementsPositions_Implementation(
+		TMap<FGameplayTag, FSkillTreeNodePosition>& OutNodePositions,
+		TMap<FSkillTreeLinkName, FSkillTreeLinkPosition>& OutLinkPositions) override;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Nodes")
 	TArray<FSkillTreeCircularLayoutElement> Nodes;

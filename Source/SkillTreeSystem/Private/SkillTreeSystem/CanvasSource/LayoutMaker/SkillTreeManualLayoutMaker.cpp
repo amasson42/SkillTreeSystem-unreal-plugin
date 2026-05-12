@@ -3,13 +3,13 @@
 
 #include "SkillTreeSystem/CanvasSource/LayoutMaker/SkillTreeManualLayoutMaker.h"
 
-void USkillTreeManualLayoutMaker::GetElementsPosition_Implementation(
-	TMap<FGameplayTag, FSkillTreeNodePosition>& NodePositions,
-	TMap<FSkillTreeLinkName, FSkillTreeLinkPosition>& LinkPositions)
+void USkillTreeManualLayoutMaker::GetCanvasElementsPositions_Implementation(
+	TMap<FGameplayTag, FSkillTreeNodePosition>& OutNodePositions,
+	TMap<FSkillTreeLinkName, FSkillTreeLinkPosition>& OutLinkPositions)
 {
 	for (const auto& [NodeId, NodeData] : Nodes)
 	{
-		NodePositions.Add(NodeId, NodeData.Position);
+		OutNodePositions.Add(NodeId, NodeData.Position);
 		
 		for (const auto& Link : NodeData.Links)
 		{
@@ -18,7 +18,7 @@ void USkillTreeManualLayoutMaker::GetElementsPosition_Implementation(
 				FSkillTreeLinkPosition LinkPosition;
 				LinkPosition.CanvasStartLocation = NodeData.Position.CanvasLocation;
 				LinkPosition.CanvasEndLocation = LinkData->Position.CanvasLocation;
-				LinkPositions.Add({NodeId, Link}, LinkPosition);
+				OutLinkPositions.Add({NodeId, Link}, LinkPosition);
 			}
 		}
 	}

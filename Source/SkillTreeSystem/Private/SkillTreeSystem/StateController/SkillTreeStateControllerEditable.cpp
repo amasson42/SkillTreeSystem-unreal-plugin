@@ -10,9 +10,9 @@ void USkillTreeStateControllerEditable::InitTreeWithSource(TScriptInterface<ISki
 	if (!(Source && IsValid(Source.GetObject()))) return;
 	
 	TArray<FGameplayTag> Nodes;
-	ISkillTreeCanvasSourceInterface::Execute_GetNodesIds(Source.GetObject(), Nodes);
+	ISkillTreeCanvasSourceInterface::Execute_GetCanvasNodesIds(Source.GetObject(), Nodes);
 	TArray<FSkillTreeLinkName> Links;
-	ISkillTreeCanvasSourceInterface::Execute_GetLinks(Source.GetObject(), Links);
+	ISkillTreeCanvasSourceInterface::Execute_GetCanvasLinkIds(Source.GetObject(), Links);
 	
 	for (const FGameplayTag& NodeId : Nodes)
 		NodeStates.Add(NodeId);

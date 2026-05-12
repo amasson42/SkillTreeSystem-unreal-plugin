@@ -29,27 +29,18 @@ class SKILLTREESYSTEM_API ISkillTreeCanvasSourceInterface
 public:
 	
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "SkillTreeSourceInterface|Nodes")
-	void GetNodesIds(TArray<FGameplayTag>& OutNodes);
+	void GetCanvasNodesIds(TArray<FGameplayTag>& OutNodes);
 	
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "SkillTreeSourceInterface|Nodes")
-	void GetNodeClass(const FGameplayTag& NodeId, TSubclassOf<USkillTreeNodeWidget>& OutWidgetClass);
-	
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "SkillTreeSourceInterface|Nodes")
-	void GetNodeAppearance(const FGameplayTag& NodeId, FSkillTreeNodeAppearance& OutAppearance);
-	
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "SkillTreeSourceInterface|Nodes")
-	void GetNodesPosition(TMap<FGameplayTag, FSkillTreeNodePosition>& NodePositions);
+	void GetCanvasNodeData(const FGameplayTag& NodeId, TSubclassOf<USkillTreeNodeWidget>& OutWidgetClass, FSkillTreeNodeAppearance& OutAppearance);
 	
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "SkillTreeSourceInterface|Links")
-	void GetLinks(TArray<FSkillTreeLinkName>& OutLinks);
+	void GetCanvasLinkIds(TArray<FSkillTreeLinkName>& OutLinks);
 	
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "SkillTreeSourceInterface|Links")
-	void GetLinkClass(const FSkillTreeLinkName& LinkName, TSubclassOf<USkillTreeLinkWidget>& OutWidgetClass);
+	void GetCanvasLinkData(const FSkillTreeLinkName& LinkName, TSubclassOf<USkillTreeLinkWidget>& OutWidgetClass, FSkillTreeLinkAppearance& OutAppearance);
 	
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "SkillTreeSourceInterface|Links")
-	void GetLinkAppearance(const FSkillTreeLinkName& LinkName, FSkillTreeLinkAppearance& OutAppearance);
-	
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "SkillTreeSourceInterface|Links")
-	void GetLinksPositions(TMap<FSkillTreeLinkName, FSkillTreeLinkPosition>& OutLinksPositions);
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "SkillTreeSourceInterface|Positions")
+	void GetCanvasElementsPositions(TMap<FGameplayTag, FSkillTreeNodePosition>& OutNodePositions, TMap<FSkillTreeLinkName, FSkillTreeLinkPosition>& OutLinkPositions);
 	
 };

@@ -81,7 +81,7 @@ void _CalculateNodesAngles(_CircNodeData* ParentNodeData, TSet<_CircNodeData*>& 
 	}
 }
 
-void USkillTreeCircularLayoutMaker::GetElementsPosition_Implementation(
+void USkillTreeCircularLayoutMaker::GetCanvasElementsPositions_Implementation(
 	TMap<FGameplayTag, FSkillTreeNodePosition>& OutNodePositions,
 	TMap<FSkillTreeLinkName, FSkillTreeLinkPosition>& OutLinkPositions)
 {

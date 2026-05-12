@@ -41,9 +41,9 @@ class SKILLTREESYSTEM_API USkillTreeHierarchicalLayoutMaker : public UDataAsset,
 	
 public:
 	
-	virtual void GetElementsPosition_Implementation(
-		TMap<FGameplayTag, FSkillTreeNodePosition>& NodePositions,
-		TMap<FSkillTreeLinkName, FSkillTreeLinkPosition>& LinkPositions) override;
+	virtual void GetCanvasElementsPositions_Implementation(
+		TMap<FGameplayTag, FSkillTreeNodePosition>& OutNodePositions,
+		TMap<FSkillTreeLinkName, FSkillTreeLinkPosition>& OutLinkPositions) override;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Nodes")
 	TArray<FSkillTreeHierarchicalLayoutElement> Nodes;

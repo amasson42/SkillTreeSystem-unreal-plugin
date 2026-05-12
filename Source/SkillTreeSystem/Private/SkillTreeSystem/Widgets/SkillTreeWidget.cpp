@@ -25,11 +25,11 @@ void USkillTreeWidget::SetStateController(USkillTreeStateControllerBase* InState
 	
 	TArray<FGameplayTag> Nodes;
 	TArray<FSkillTreeLinkName> Links;
-
+	
 	if (Source && IsValid(Source.GetObject()))
 	{
-		ISkillTreeCanvasSourceInterface::Execute_GetNodesIds(Source.GetObject(), Nodes);	
-		ISkillTreeCanvasSourceInterface::Execute_GetLinks(Source.GetObject(), Links);
+		ISkillTreeCanvasSourceInterface::Execute_GetCanvasNodesIds(Source.GetObject(), Nodes);	
+		ISkillTreeCanvasSourceInterface::Execute_GetCanvasLinkIds(Source.GetObject(), Links);
 	}
 	
 	for (const FGameplayTag& NodeId : Nodes)

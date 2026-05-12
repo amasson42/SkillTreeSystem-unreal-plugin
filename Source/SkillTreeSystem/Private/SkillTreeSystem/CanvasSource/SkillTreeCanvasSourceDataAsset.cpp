@@ -6,57 +6,45 @@
 #include "SkillTreeSystem/CanvasSource/LayoutMaker/SkillTreeLayoutMaker.h"
 
 
-void USkillTreeCanvasSourceDataAsset::GetNodesIds_Implementation(TArray<FGameplayTag>& OutNodes)
+void USkillTreeCanvasSourceDataAsset::GetCanvasNodesIds_Implementation(TArray<FGameplayTag>& OutNodes)
 {
 	Nodes.GetKeys(OutNodes);
 }
 
-void USkillTreeCanvasSourceDataAsset::GetNodeClass_Implementation(const FGameplayTag& NodeId, TSubclassOf<USkillTreeNodeWidget>& OutWidgetClass)
+void USkillTreeCanvasSourceDataAsset::GetCanvasNodeData_Implementation(const FGameplayTag& NodeId,
+	TSubclassOf<USkillTreeNodeWidget>& OutWidgetClass, FSkillTreeNodeAppearance& OutAppearance)
 {
 	OutWidgetClass = NodeWidgetClass;
-}
-
-void USkillTreeCanvasSourceDataAsset::GetNodeAppearance_Implementation(const FGameplayTag& NodeId, FSkillTreeNodeAppearance& OutAppearance)
-{
 	if (const auto* Element = Nodes.Find(NodeId))
 	{
 		OutAppearance = Element->Appearance;
 	}
 }
 
-void USkillTreeCanvasSourceDataAsset::GetNodesPosition_Implementation(TMap<FGameplayTag, FSkillTreeNodePosition>& NodePositions)
-{
-	if (!(LayoutSource && IsValid(LayoutSource.GetObject()))) return;
-	
-	TMap<FSkillTreeLinkName, FSkillTreeLinkPosition> LinksPositions;
-	ISkillTreeLayoutMaker::Execute_GetElementsPosition(LayoutSource.GetObject(), NodePositions, LinksPositions);
-}
-
-void USkillTreeCanvasSourceDataAsset::GetLinks_Implementation(TArray<FSkillTreeLinkName>& OutLinks)
+void USkillTreeCanvasSourceDataAsset::GetCanvasLinkIds_Implementation(TArray<FSkillTreeLinkName>& OutLinks)
 {
 	if (!(LayoutSource && IsValid(LayoutSource.GetObject()))) return;
 	
 	TMap<FGameplayTag, FSkillTreeNodePosition> NodePositions;
 	TMap<FSkillTreeLinkName, FSkillTreeLinkPosition> LinksPositions;
-	ISkillTreeLayoutMaker::Execute_GetElementsPosition(LayoutSource.GetObject(), NodePositions, LinksPositions);
+	ISkillTreeLayoutMaker::Execute_GetCanvasElementsPositions(LayoutSource.GetObject(), NodePositions, LinksPositions);
 	
 	LinksPositions.GetKeys(OutLinks);
 }
 
-void USkillTreeCanvasSourceDataAsset::GetLinkClass_Implementation(const FSkillTreeLinkName& LinkName, TSubclassOf<USkillTreeLinkWidget>& OutWidgetClass)
+void USkillTreeCanvasSourceDataAsset::GetCanvasLinkData_Implementation(const FSkillTreeLinkName& LinkName,
+	TSubclassOf<USkillTreeLinkWidget>& OutWidgetClass, FSkillTreeLinkAppearance& OutAppearance)
 {
 	OutWidgetClass = LinkWidgetClass;
-}
-
-void USkillTreeCanvasSourceDataAsset::GetLinkAppearance_Implementation(const FSkillTreeLinkName& LinkName, FSkillTreeLinkAppearance& OutAppearance)
-{
 	OutAppearance = LinkAppearance;
 }
 
-void USkillTreeCanvasSourceDataAsset::GetLinksPositions_Implementation(TMap<FSkillTreeLinkName, FSkillTreeLinkPosition>& OutLinksPositions)
+void USkillTreeCanvasSourceDataAsset::GetCanvasElementsPositions_Implementation(
+	TMap<FGameplayTag, FSkillTreeNodePosition>& OutNodePositions,
+	TMap<FSkillTreeLinkName, FSkillTreeLinkPosition>& OutLinkPositions)
 {
 	if (!(LayoutSource && IsValid(LayoutSource.GetObject()))) return;
 	
-	TMap<FGameplayTag, FSkillTreeNodePosition> NodePositions;
-	ISkillTreeLayoutMaker::Execute_GetElementsPosition(LayoutSource.GetObject(), NodePositions, OutLinksPositions);
+	ISkillTreeLayoutMaker::Execute_GetCanvasElementsPositions(LayoutSource.GetObject(),
+		OutNodePositions, OutLinkPositions);
 }
