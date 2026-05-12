@@ -34,3 +34,36 @@ void FSkillTreeRequirementBase::InstGatherInterests(
 	
 	return Requirement->GatherInterests(Interests);
 }
+
+bool FSkillTreeLevelRequirement::CanStateUpgradeLevel(
+	USkillTreeStateControllerBase* State,
+	const TArray<FSkillTreeLevelRequirement>& LevelRequirements,
+	const FInstancedStruct& GlobalRequirement,
+	int32 AimedLevel,
+	bool bIgnoreGlobal)
+{
+	if (AimedLevel >= LevelRequirements.Num())
+		return false;
+	
+	if (AimedLevel < 0)
+		return false;
+	
+	const auto& LevelData = LevelRequirements[AimedLevel];
+	
+	if (LevelData.bUseGlobalRequirements && !bIgnoreGlobal)
+	{
+		if (!FSkillTreeRequirementBase::InstIsFulfilled(GlobalRequirement, State))
+			return false;
+	}
+	
+	if (LevelData.bUsePreviousLevelRequirements && AimedLevel > 0)
+	{
+		if (!CanStateUpgradeLevel(State, LevelRequirements, GlobalRequirement, AimedLevel - 1))
+			return false;
+	}
+	
+	if (!FSkillTreeRequirementBase::InstIsFulfilled(LevelData.Requirement, State))
+		return false;
+	
+	return true;
+}

@@ -13,7 +13,13 @@ void USkillTreeBehaviorDataAsset::GetNodesIds_Implementation(TArray<FGameplayTag
 
 bool USkillTreeBehaviorDataAsset::CanUpgradeNode_Implementation(const FGameplayTag& NodeId, USkillTreeStateControllerBase* State) const
 {
-	return _CanUpgradeNode(NodeId, State);
+	if (const auto* NodeBehavior = Nodes.Find(NodeId))
+	{
+		FSkillTreeNodeState NodeState;
+		State->GetNodeState(NodeId, NodeState);
+		return FSkillTreeLevelRequirement::CanStateUpgradeLevel(State, NodeBehavior->Levels, GlobalRequirement, NodeState.Level);
+	}
+	return false;
 }
 
 void USkillTreeBehaviorDataAsset::UpdateNodeState_Implementation(const FGameplayTag& NodeId, USkillTreeStateControllerEditable* State)
@@ -46,14 +52,10 @@ void USkillTreeBehaviorDataAsset::UpdateNodeState_Implementation(const FGameplay
 		bModified = true;
 	}
 	
-	if (_CanUpgradeNode(NodeId, State, NodeBehavior, &NewNodeState))
-	{
+	if (FSkillTreeLevelRequirement::CanStateUpgradeLevel(State, NodeBehavior->Levels, GlobalRequirement, NewNodeState.Level))
 		EnsureStatus(NewNodeState.Level > 0 ? ESkillTreeElementStatus::Upgradeable : ESkillTreeElementStatus::Available);
-	}
 	else
-	{
 		EnsureStatus(NewNodeState.Level > 0 ? ESkillTreeElementStatus::Picked : ESkillTreeElementStatus::Locked);
-	}
 	
 	if (bModified)
 		State->SetNodeState(NodeId, NewNodeState);
@@ -67,42 +69,7 @@ void USkillTreeBehaviorDataAsset::GatherInterestsForNode_Implementation(const FG
 	for (const auto& LevelData : NodeBehavior->Levels)
 	{
 		FSkillTreeRequirementBase::InstGatherInterests(LevelData.Requirement, Interests);
-		if (!LevelData.bIgnoreGlobalRequirements)
+		if (LevelData.bUseGlobalRequirements)
 			FSkillTreeRequirementBase::InstGatherInterests(GlobalRequirement, Interests);
 	}
-}
-
-bool USkillTreeBehaviorDataAsset::_CanUpgradeNode(
-	const FGameplayTag& NodeId,
-	USkillTreeStateControllerBase* State,
-	const FSkillTreeBehaviorDataAssetElement* CachedBehavior,
-	const FSkillTreeNodeState* CachedState) const
-{
-	FSkillTreeNodeState NodeState;
-	if (CachedState)
-		NodeState = *CachedState;
-	else
-		State->GetNodeState(NodeId, NodeState);
-	
-	const auto* NodeBehavior = CachedBehavior ? CachedBehavior : Nodes.Find(NodeId);
-	if (!NodeBehavior) return false;
-	
-	if (NodeState.Level >= NodeBehavior->Levels.Num())
-		return false;
-	
-	if (NodeState.Level < 0)
-		return false;
-	
-	const auto& LevelData = NodeBehavior->Levels[NodeState.Level];
-	
-	if (!LevelData.bIgnoreGlobalRequirements)
-	{
-		if (!FSkillTreeRequirementBase::InstIsFulfilled(GlobalRequirement, State))
-			return false;
-	}
-	
-	if (!FSkillTreeRequirementBase::InstIsFulfilled(LevelData.Requirement, State))
-		return false;
-	
-	return true;
 }

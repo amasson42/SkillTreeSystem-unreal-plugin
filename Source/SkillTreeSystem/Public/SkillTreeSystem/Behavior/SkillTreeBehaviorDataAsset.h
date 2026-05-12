@@ -10,20 +10,6 @@
 #include "SkillTreeSystem/Behavior/Requirements/SkillTreeRequirementBase.h"
 #include "SkillTreeBehaviorDataAsset.generated.h"
 
-USTRUCT(BlueprintType)
-struct SKILLTREESYSTEM_API FSkillTreeBehaviorLevelData
-{
-	GENERATED_BODY()
-	
-public:
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Requirements", meta = (BaseStruct = "/Script/SkillTreeSystem.SkillTreeRequirementBase", ExcludeBaseStruct))
-	FInstancedStruct Requirement;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Requirements")
-	bool bIgnoreGlobalRequirements = false;
-	
-};
 
 USTRUCT(BlueprintType)
 struct SKILLTREESYSTEM_API FSkillTreeBehaviorDataAssetElement
@@ -33,7 +19,7 @@ struct SKILLTREESYSTEM_API FSkillTreeBehaviorDataAssetElement
 public:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Levels")
-	TArray<FSkillTreeBehaviorLevelData> Levels;
+	TArray<FSkillTreeLevelRequirement> Levels;
 	
 };
 
@@ -57,11 +43,5 @@ public:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Requirements", meta = (BaseStruct = "/Script/SkillTreeSystem.SkillTreeRequirementBase", ExcludeBaseStruct))
 	FInstancedStruct GlobalRequirement;
-	
-private:
-	
-	bool _CanUpgradeNode(const FGameplayTag& NodeId, USkillTreeStateControllerBase* State,
-		const FSkillTreeBehaviorDataAssetElement* CachedBehavior = nullptr,
-		const FSkillTreeNodeState* CachedState = nullptr) const;
 	
 };
