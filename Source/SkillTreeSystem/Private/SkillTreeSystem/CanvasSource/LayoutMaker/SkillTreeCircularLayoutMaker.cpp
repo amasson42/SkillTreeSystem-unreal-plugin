@@ -4,11 +4,11 @@
 #include "SkillTreeSystem/CanvasSource/LayoutMaker/SkillTreeCircularLayoutMaker.h"
 
 
-struct _NodeData
+struct _CircNodeData
 {
 	FGameplayTag Name;
-	_NodeData* ParentPtr = nullptr;
-	TArray<_NodeData*> ChildsPtr;
+	_CircNodeData* ParentPtr = nullptr;
+	TArray<_CircNodeData*> ChildsPtr;
 	
 	int32 Level = -1;
 	float Angle = 0.0f;
@@ -17,10 +17,10 @@ struct _NodeData
 	
 	FVector2D Position = FVector2D::ZeroVector;
 	
-	_NodeData(FGameplayTag InName): Name(InName) {}
+	_CircNodeData(FGameplayTag InName): Name(InName) {}
 };
 
-static void _CalculateLocalNodeLevel(_NodeData* NodePtr)
+static void _CalculateLocalNodeLevel(_CircNodeData* NodePtr)
 {
 	if (NodePtr->ParentPtr->Level < 0)
 	{
@@ -34,7 +34,7 @@ static void _CalculateLocalNodeLevel(_NodeData* NodePtr)
 };
 
 static void _PopulateOutElements(
-	const TMap<FGameplayTag, _NodeData>& LocalNodeDatas,
+	const TMap<FGameplayTag, _CircNodeData>& LocalNodeDatas,
 	TMap<FGameplayTag, FSkillTreeNodePosition>& OutNodePositions,
 	TMap<FSkillTreeLinkName, FSkillTreeLinkPosition>& OutLinkPositions)
 {
@@ -58,7 +58,7 @@ static void _PopulateOutElements(
 	}
 }
 
-void _CalculateNodesAngles(_NodeData* ParentNodeData, TSet<_NodeData*> Parents)
+void _CalculateNodesAngles(_CircNodeData* ParentNodeData, TSet<_CircNodeData*>& Parents)
 {
 	const float ArcStartAngle = ParentNodeData->AngleRangeMin;
 	const float ArcEndAngle = ParentNodeData->AngleRangeMax;
@@ -85,7 +85,7 @@ void USkillTreeCircularLayoutMaker::GetElementsPosition_Implementation(
 	TMap<FGameplayTag, FSkillTreeNodePosition>& OutNodePositions,
 	TMap<FSkillTreeLinkName, FSkillTreeLinkPosition>& OutLinkPositions)
 {
-	TMap<FGameplayTag, _NodeData> LocalNodeDatas;
+	TMap<FGameplayTag, _CircNodeData> LocalNodeDatas;
 	
 	// Instanciate all local data
 	for (const auto& Node : Nodes)
@@ -102,7 +102,7 @@ void USkillTreeCircularLayoutMaker::GetElementsPosition_Implementation(
 			LocalNodeData.ParentPtr->ChildsPtr.Add(&LocalNodeData);
 	}
 	
-	_NodeData RootNode {FGameplayTag()};
+	_CircNodeData RootNode {FGameplayTag()};
 	
 	// Find roots and levels
 	for (auto& [NodeId, LocalNodeData] : LocalNodeDatas)
@@ -121,7 +121,7 @@ void USkillTreeCircularLayoutMaker::GetElementsPosition_Implementation(
 	RootNode.AngleRangeMin = ArcStartAngle;
 	RootNode.AngleRangeMax = ArcEndAngle;
 	
-	TSet<_NodeData*> Parents;
+	TSet<_CircNodeData*> Parents;
 	_CalculateNodesAngles(&RootNode, Parents);
 	
 	for (auto& [NodeId, NodeData] : LocalNodeDatas)
