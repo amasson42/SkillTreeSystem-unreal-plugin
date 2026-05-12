@@ -10,7 +10,7 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(Abstract)
 class SKILLTREESYSTEM_API USkillTreeLinkWidget : public UUserWidget
 {
 	GENERATED_BODY()

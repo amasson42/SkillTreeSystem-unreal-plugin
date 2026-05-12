@@ -13,7 +13,7 @@ class ISkillTreeCanvasSourceInterface;
 /**
  * 
  */
-UCLASS()
+UCLASS(Abstract)
 class SKILLTREESYSTEM_API USkillTreeWidget : public UUserWidget
 {
 	GENERATED_BODY()

@@ -13,7 +13,7 @@ class UCanvasPanelSlot;
 /**
  * 
  */
-UCLASS()
+UCLASS(Abstract)
 class SKILLTREESYSTEM_API USkillTreeNodeWidget : public UUserWidget
 {
 	GENERATED_BODY()
